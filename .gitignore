@@ -1,0 +1,7 @@
+
+*.efi
+vb/
+ovmf/
+drive/
+.git/
+
