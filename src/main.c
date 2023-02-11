@@ -1,14 +1,13 @@
-#include <uefi.h>
+#include "include\bootmenu.h"
 
-/**
- * Classic Hello World example
- */
+
 int main(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
     while (1)
     {
+        ST->ConOut->ClearScreen(ST->ConOut);
         printf("Hello World!\n");
 
     }
