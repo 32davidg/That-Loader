@@ -40,7 +40,7 @@ void ResetKeyboard()
 // checks if CHAR16 key and CheckKeystroke have the same value
 // returns true if both match, otherwise returns false
 efi_input_key_t CheckKeystroke;
-boolean_t GetKey(char16_t key)
+boolean_t GetKey(char_t key)
 {
     if(CheckKeystroke.UnicodeChar == key)
     {
