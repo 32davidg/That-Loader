@@ -122,4 +122,8 @@ static void InitBootMenuOutput(void)
     {
         bmcfg.maxEntriesOnScreen = screenRows - reserved_rows;
     }
+    else
+    {
+        bmcfg.maxEntriesOnScreen = DEFAULT_CONSOLE_ROWS - reserved_rows;
+    }
 }
