@@ -4,11 +4,19 @@
 #include "../include/bootutils.h"
 #include "../include/display.h"
 
+
+// Temp forward declarations
+static void InitBootMenuOutput(void);
+static void FailMenu(const char_t* errorMsg);
+void StartBootManager();
+
+
+
 boot_menu_cfg_s bmcfg; // boot menu config
 void StartBootManager()
 {
 
-    //InitBootMenuConfig()
+    InitBootMenuOutput();
     // for later, when reading from config file
     while(TRUE)
     {
