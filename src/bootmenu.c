@@ -113,6 +113,8 @@ static void FailMenu(const char_t* errorMsg)
 
 /*
 * This function sets up the screen for boot entries menu
+* uses the bmcfg (boot menu config) struct to initialize the boot screen
+* inits rows, columns, and all bcmfg attributes
 */
 static void InitBootMenuOutput(void)
 {
@@ -126,4 +128,10 @@ static void InitBootMenuOutput(void)
     {
         bmcfg.maxEntriesOnScreen = DEFAULT_CONSOLE_ROWS - reserved_rows;
     }
+    bmcfg.entryOffset = 0;
+    bmcfg.timeoutSeconds = DEFAULT_TIMEOUT_SECONDS;
+    bmcfg.selectedEntryIndex = 0;
+    bmcfg.timeoutCancelled = FALSE;
+    bmcfg.bootImmediately = FALSE;
+
 }
