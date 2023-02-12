@@ -42,7 +42,10 @@ void StartBootManager()
     }
     
 }
-
+/*
+* Fail menu - use it whenever somethng goes wrong
+* 
+*/
 static void FailMenu(const char_t* errorMsg)
 {
     boolean_t returnToMainMenu = FALSE;
@@ -62,12 +65,11 @@ static void FailMenu(const char_t* errorMsg)
            "5) Shutdown\r\n"
            "Choose desired option to continue\r\n");
         
-    
-        ST->ConIn->Reset(ST->ConIn, 0);
-        efi_status_t status = CheckKey();
-        if(status == EFI_SUCCESS)
+        while(1)
         {
-            while(1)
+            ST->ConIn->Reset(ST->ConIn, 0);
+            efi_status_t status = CheckKey();
+            if(status == EFI_SUCCESS)
             {
                 if(GetKey('1') == 1)
                 {
