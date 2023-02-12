@@ -2,6 +2,7 @@
 #include "../include/ErrorCodes.h"
 #include "../include/efilibs.h"
 #include "../include/bootutils.h"
+#include "../include/display.h"
 
 boot_menu_cfg_s bmcfg; // boot menu config
 void StartBootManager()
@@ -44,7 +45,8 @@ void StartBootManager()
 }
 /*
 * Fail menu - use it whenever somethng goes wrong
-* 
+* user gets a few options to recover failed attmept
+* (return to main menu, open shell, show error log file, reboot and shutdown)
 */
 static void FailMenu(const char_t* errorMsg)
 {
@@ -109,4 +111,15 @@ static void FailMenu(const char_t* errorMsg)
 }
 
 
-
+/*
+* This function sets up the screen for boot entries menu
+*/
+static void InitBootMenuOutput(void)
+{
+    // reserved rows for other entries
+    const int32_t reserved_rows = 10;
+    if(screenModeSet) // if screen size is set and ready to use
+    {
+        bmcfg.maxEntriesOnScreen = screenRows - reserved_rows;
+    }
+}
