@@ -1,8 +1,14 @@
 #pragma once
 #include <uefi.h>
+
+// config file error codes
 #define BAD_CONFIGURATION_ERR_MSG ("An error has occurred while parsing the config file.")
+
+// booting error codes
 #define FAILED_BOOT_ERR_MSG ("An error has occurred during the booting process.")
 
+
+// CMD error codes
 #define CMD_SUCCESS (0)
 #define CMD_NO_FILE_SPECIFIED (35)
 #define CMD_NO_DIR_SPEFICIED (36)

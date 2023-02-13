@@ -1,5 +1,6 @@
 #include "../include/ErrorCodes.h"
 
+
 void PrintCommandError(const char_t* cmd, const char_t* args, const uint8_t error)
 {
     printf("%s: ", cmd);
@@ -9,7 +10,11 @@ void PrintCommandError(const char_t* cmd, const char_t* args, const uint8_t erro
     }
     printf("%s\n", GetCommandErrorInfo(error));
 }
-
+/*
+* This function prints a detailed error message
+* It recieves the error from the cmd interface, and prints it in an understabdable way
+* taken errors are taken from cmd implentation
+*/
 const char_t* GetCommandErrorInfo(const uint8_t error)
 {
     switch (error)
