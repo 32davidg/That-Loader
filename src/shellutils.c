@@ -408,6 +408,31 @@ int32_t PrintFileContent(char_t* path)
 }
 
 
+/*
+* copy file from src to dest
+* both const char_t* are the file paths
+*/
+int32_t CopyFile(const char_t* src, const char_t* dest)
+{
+    FILE* srcFP = fopen(src, "r");
+    if (srcFP ==NULL)
+    {
+        return errno;
+    }
+    FILE* destFP = fopen(dest, "w");
+    if (destFP == NULL)
+    {
+        fclose(srcFP);
+        return errno;
+    }
+
+    char_t buf[BUFSIZ];
+    uint64_t srcSize = GetFileS
+
+}
+
+
+
 
 
 

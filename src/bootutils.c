@@ -45,3 +45,36 @@ char_t* GetFileContent(char_t* path, uint64_t* outFileSize)
     }
     return buffer;
 }
+
+
+/*
+* This Function recieves a file handle a file info handle,
+* write file handle, its GUID, and its size
+*/
+efi_status_t GetFileInfo(efi_file_handle_t* fileHandle, efi_file_info_t* fileInfo)
+{
+    efi_guid_t infGuid = EFI_FILE_INFO_GUID;
+    uintn_t size = sizeof(efi_file_info_t);
+    return fileHandle->GetInfo(fileHandle, &infGuid, &size, (void*)fileInfo);
+
+
+
+}
+
+
+// Returns the size of the file in bytes
+uint64_t GetFileSize(FILE* file)
+{
+    if (file == NULL)
+    {
+        return 0;
+    }
+    efi_file_info_t info;
+    efi_status_t status = GetFileInfo(file, &info);
+    if (EFI_ERROR(status)){
+        Log(LL_ERROR, status, "Failed to get file info when getting file size.");
+        return 0;
+    }
+    return info.FileSize;
+
+}
