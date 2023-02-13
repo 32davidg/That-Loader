@@ -21,7 +21,7 @@ void RemoveRepeatedChars(char_t* str, char_t toRemove);
 int32_t GetValueOffset(char_t* line, const char delimiter);
 
 boolean_t FindFlagAndDelete(cmd_args_s** argsHead, const char_t* flagStr);
-cmd_args_s* GetLastArg(const char_t* src, const char_t* dest);
+cmd_args_s* GetLastArg(cmd_args_s* head);
 
 int32_t PrintFileContent(char_t* path);
 int32_t CreateDirectory(char_t* path);

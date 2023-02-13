@@ -372,6 +372,20 @@ boolean_t FindFlagAndDelete(cmd_args_s** argsHead, const char_t* flagStr)
 }
 
 
+/*
+* This function recieves a linked list head, and returns the
+* last node in the list (which is the last arg)
+*/
+cmd_args_s* GetLastArg(cmd_args_s* head)
+{
+    while(head->next != NULL)
+    {
+        head = head->next;
+    }
+    return head;
+}
+
+
 
 
 
