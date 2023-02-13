@@ -545,6 +545,7 @@ char_t* StringReplace(const char_t* orig, const char_t* pattern, const char_t* r
 /*
 * Prints space characters to fill and entire screen row, used
 * to overwrite dead text
+* this is purly chatGPT
 */
 void PrintEmptyLine(void)
 {
@@ -554,13 +555,50 @@ void PrintEmptyLine(void)
         return;
     }
 
-    // Including null char
-    int32_t amount = screenCols + 1;
+    const int32_t amount = screenCols + 1;
+    char_t *buf = (char_t*)malloc(amount * sizeof(char_t));
+    if (buf == NULL)
+    {
+        Log(LL_ERROR, 0, "Failed to allocate memory for a cute little buffer...");
+        return;
+    }
 
-    char_t buf[amount];
-    memset(buf, ' ', amount);
+    memset(buf, ' ', amount - 1);
     buf[screenCols] = CHAR_NULL;
     printf("%s", buf);
+
+    // Don't forget to free the buffer when you're done with it
+    free(buf);
+
+}
+
+// Prints space characters to fill the row. Used to overwrite dead text.
+void PadRow(void)
+{
+    // Find the amount of spaces left to print, and add 1 for the null char
+    const int32_t amount = screenCols - ST->ConOut->Mode->CursorColumn + 1;
+    // Prevent creating a negative sized array
+    if (amount < 1 || !screenModeSet)
+    {
+        putchar('\n');
+        return;
+    }
+
+    char_t *buf = (char_t*)malloc(amount * sizeof(char_t));
+    if (buf == NULL)
+    {
+        Log(LL_ERROR, 0, "Failed to allocate memory for a cute little buffer...");
+        return;
+    }   
+
+    memset(buf, ' ', amount);
+    buf[amount - 1] = CHAR_NULL;
+    printf("%s", buf);
+
+    // Don't forget to free the buffer when you're done with it
+    free(buf);
+}
+
 
 
 
