@@ -268,4 +268,29 @@ boolean_t IsSpace(const char_t c)
 }
 
 
+/*
+* Trim accidental spaces form input
+*/
+char_t* TrimSpaces(char_t* str)
+{
+    size_t stringLen = strlen(str);
+    char_t* originalString = str;
+
+    // remove trailing spaces (end of the string)
+    char_t* end = originalString + stringLen - 1;
+    while(end > originalString && IsSpace(*end)) // check if if end of string is space
+    {
+        end--; // if it is, then go one char back
+    }
+
+    // remove leading whitespace (in the start of the string)
+    while (IsSpace(*str))
+    {
+        str++;
+    }
+
+    return str;
+}
+
+
 
