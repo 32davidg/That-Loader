@@ -10,3 +10,6 @@
 
 
 void EnableWatchdogTimer(uintn_t seconds);
+
+char_t* GetFileContent(char_t* path, uint64_t* outFileSize);
+

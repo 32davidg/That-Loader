@@ -384,6 +384,28 @@ cmd_args_s* GetLastArg(cmd_args_s* head)
     }
     return head;
 }
+/*
+* This func recieves a file path, and prints its contents
+*/
+int32_t PrintFileContent(char_t* path)
+{
+    uint64_t fileSize = 0;
+    char_t* buffer = GetFileContent(path, &fileSize);
+    if (buffer == NULL)
+    {
+        return errno;
+    }
+
+    // Printing this in order to prevent issues when printing binary files
+    for(uint64_t i =0; i <fileSize; i++)
+    {
+        putchar(buffer[i]);
+    }
+    putchar('\n');
+
+    free(buffer);
+    return 0;
+}
 
 
 
