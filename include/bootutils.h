@@ -5,4 +5,8 @@
 #define FALSE ((boolean_t)0)
 #define TRUE ((boolean_t)1)
 
+#define DEFAULT_WATCHDOG_TIMEOUT (300)
 
+
+
+void EnableWatchdogTimer(uintn_t seconds);

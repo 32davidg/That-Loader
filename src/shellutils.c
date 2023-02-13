@@ -139,7 +139,7 @@ uint8_t NormalizePath(char_t** path)
 }
 
 // make path usable and clean
-// get rid of unnecessary backslashes
+// get rid of unnecessary backslashes, and other whitespace chars
 void CleanPath(char_t** path)
 {
     path = TrimSpaces(*path);
@@ -155,3 +155,54 @@ void CleanPath(char_t** path)
     }
 
 }
+
+/*
+* function that gets an input path, and inputs argument, and returns the full path to pathArg object
+*/
+char_t* MakeFullPath(char_t* pathArg, char_t* currPathPtr, boolean_t* isDynamicMemory)
+{
+    char_t* fullPath = NULL;
+
+    CleanPath(&pathArg);
+
+    //check if path starts from the root dir
+    if (pathArg[0] == DIRECTORY_DELIM)
+    {
+        fullPath = pathArg;
+        *isDynamicMemory  = FALSE;
+    }
+    // if the args are only whitespace
+    else if (pathArg[0] == CHAR_NULL)
+    {
+        *isDynamicMemory = FALSE;
+        return NULL;
+    }
+    else // Check the concatenated path
+    {
+        fullPath = ConcatPaths(currPathPtr, pathArg);
+        if (fullPath == NULL)
+        {
+            return NULL;
+        }
+        *isDynamicMemory = TRUE;
+    }
+    return fullPath;
+}
+
+efi_input_key_t GetInputKey(void)
+{
+    efi_status_t status = 0;
+    efi_input_key_t key = {0};
+
+    do
+    {
+        uintn_t index;
+        BS->WaitForEvent(1, &ST->ConIn->WaitForKey, &index);
+        status = ST->ConIn->ReadKeyStroke(ST->ConIn, &key);
+    } while (EFI_ERROR(status));
+    EnableWatchdogTimer(DEFAULT_WATCHDOG_TIMEOUT);
+
+
+}
+
+

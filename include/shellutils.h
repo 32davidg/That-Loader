@@ -6,7 +6,7 @@
 char_t* ConcatPaths(const char_t* lhs, const char_t* rhs); 
 uint8_t NormalizePath(char_t** path);
 void CleanPath(char_t** path);
-char_t* MakeFullPath(char_t* pathArg, char_t* currPathPtr, boolean_t isDynamicMemory);
+char_t* MakeFullPath(char_t* pathArg, char_t* currPathPtr, boolean_t* isDynamicMemory);
 
 
 // input
