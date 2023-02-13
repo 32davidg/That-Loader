@@ -411,6 +411,7 @@ int32_t PrintFileContent(char_t* path)
 /*
 * copy file from src to dest
 * both const char_t* are the file paths
+* I did not write this function! this is pure chatGPT work with some of my tweaking
 */
 int32_t CopyFile(const char_t* src, const char_t* dest)
 {
@@ -427,7 +428,33 @@ int32_t CopyFile(const char_t* src, const char_t* dest)
     }
 
     char_t buf[BUFSIZ];
-    uint64_t srcSize = GetFileS
+    uint64_t srcSize = GetFileSize(srcFP);
+    for (uint64_t i = 0; i < srcSize; i += BUFSIZ)
+    {
+        uint64_t bytesToCopy;
+        if (i + BUFSIZ > srcSize) // Copy the remainder
+        {
+            bytesToCopy = srcSize - i;
+        }
+        else // Copy up to 8KiB at a time
+        {
+            bytesToCopy = BUFSIZ;
+        }
+
+        if (fread(buf, 1, bytesToCopy, srcFP) != bytesToCopy ||
+            fwrite(buf, 1, bytesToCopy, destFP) != bytesToCopy)
+        {
+            // errno may change here after each call if there is no more space left on disk
+            int32_t err = errno;
+            Log(LL_ERROR, 0, "Error during file copy: %s", GetCommandErrorInfo(err));
+            fclose(destFP);
+            fclose(srcFP);
+            return err;
+        }
+    }
+    fclose(destFP);
+    fclose(srcFP);
+    return 0;
 
 }
 
