@@ -189,6 +189,8 @@ char_t* MakeFullPath(char_t* pathArg, char_t* currPathPtr, boolean_t* isDynamicM
     return fullPath;
 }
 
+
+// get an inputted key
 efi_input_key_t GetInputKey(void)
 {
     efi_status_t status = 0;
@@ -201,8 +203,58 @@ efi_input_key_t GetInputKey(void)
         status = ST->ConIn->ReadKeyStroke(ST->ConIn, &key);
     } while (EFI_ERROR(status));
     EnableWatchdogTimer(DEFAULT_WATCHDOG_TIMEOUT);
+    return key;
+}
 
+// get an inputed string
+void GetInputString(char_t buffer[], const uint32_t maxInputSize, boolean_t hideInput)
+{
+    uint32_t index = 0;
+    
+    while(TRUE)
+    {
+        // read input continuously 
+        efi_input_key_t key = GetInputKey();
+        char_t unicodechar = key.UnicodeChar;
+
+        // procsses input, enter is \n
+        if (unicodechar == CHAR_CARRIAGE_RETURN) 
+        {
+            putchar('\n');
+            break;
+        }
+
+        // backspace (delete last char)
+        if (unicodechar == CHAR_BACKSPACE)
+        {
+            if (index > 0) // Dont delete when the buffer is empty
+            {
+                index--;
+                buffer[index] = 0;
+                printf("\b \b"); // Destructive backspace
+            }
+        }
+        // Add the character to the buffer as long as there is enough space and if its a valid character
+        // The character in the last index must be null to terminate the string
+        else if (index < maxInputSize - 1 && IsPrintableChar(unicodechar))
+        {
+            buffer[index] = unicodechar;
+            index++;
+
+            if (hideInput) // When entering a password
+            {
+                putchar('*');
+            }
+            else
+            {
+                putchar(unicodechar);
+            }
+        }
+       
+    }
+    
 
 }
+
 
 
