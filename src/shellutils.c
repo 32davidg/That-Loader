@@ -327,6 +327,45 @@ int32_t GetValueOffset(char_t* line, const char delimiter)
     curr ++; // pass delimiter
     return (curr - line);
 }
+/*
+* Function that looks for a const char_t* flagStr in a cmd_args_s** argsHead linked list
+* If flag is found, then it returns a TRUE value
+* else, returns a FALSE value
+*/
+boolean_t FindFlagAndDelete(cmd_args_s** argsHead, const char_t* flagStr)
+{
+    // If there are no args, the flag won't be found
+    if (*argsHead == NULL || flagStr == NULL)
+    {
+        return FALSE;
+    }
+    cmd_args_s* args = *argsHead;
+
+    // If the flag is in the first node
+    if (strcmp(args->argString, flagStr) == 0)
+    {
+        return TRUE;
+    }
+
+   // Start from the 2nd node
+    cmd_args_s* prev = args;
+    args = args->next;
+    while (args != NULL)
+    {
+        // Check if the flag is in the current node
+        if (strcmp(args->argString, flagStr) == 0)
+        {
+            return TRUE;
+        }
+        // Advancing the list search
+        prev = args;
+        args = args->next;
+    }
+    return FALSE;
+}
+
+
+
 
 
 
