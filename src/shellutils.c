@@ -292,5 +292,19 @@ char_t* TrimSpaces(char_t* str)
     return str;
 }
 
+void RemoveRepeatedChars(char_t* str, char_t toRemove)
+{
+    char_t* dest= str;
+    while(*str != CHAR_NULL)
+    {
+        while(*str == toRemove && *(str+1) == toRemove)
+        {
+            str++;
+        }
+        *dest++ = *str++;
+    }
+    *dest = 0;
+}
+
 
 
