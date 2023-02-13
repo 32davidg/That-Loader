@@ -455,6 +455,35 @@ int32_t CopyFile(const char_t* src, const char_t* dest)
     fclose(destFP);
     fclose(srcFP);
     return 0;
+}
+
+/*
+* Func that creates a directory in given path
+*/
+int32_t CreateDirectory(char_t* path)
+{
+    DIR* dir = opendir(path);
+    if (dir != NULL)
+    {
+        closedir(dir);
+        return CMD_DIR_ALREADY_EXISTS;
+    }
+    else
+    {
+        // Creates a new directory and frees the pointer to it
+        FILE* fp = fopen(path, "wd");
+        if (fp != NULL)
+        {
+            fclose(fp);
+        }
+        else
+        {
+            // Make the error message more sensible
+            return (errno == ENOTDIR) ? EEXIST : errno;
+        }
+    }
+    return CMD_SUCCESS;
+
 
 }
 
