@@ -143,3 +143,20 @@ static void InitBootMenuOutput(void)
     bmcfg.bootImmediately = FALSE;
 
 }
+
+
+static void scrollEntries(void)
+{
+    // 0
+    // 1
+    // 2
+    // 3
+    if(bmcfg.selectedEntryIndex < bmcfg.entryOffset) // scroll up
+    {
+        bmcfg.entryOffset = bmcfg.selectedEntryIndex;
+    }
+    if (bmcfg.selectedEntryIndex >= bmcfg.entryOffset + bmcfg.maxEntriesOnScreen) // scroll down (bmcfg.maxEntriesOnScreen to avoid scrolling out of bounds)
+    {
+        bmcfg.entryOffset = bmcfg.selectedEntryIndex - bmcfg.maxEntriesOnScreen + 1;
+    }
+}

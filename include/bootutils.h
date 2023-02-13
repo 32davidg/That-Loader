@@ -6,8 +6,3 @@
 #define TRUE ((boolean_t)1)
 
 
-// while there is no actual defualt, I just eyeballed it
-#define DEFAULT_CONSOLE_COLUMNS (80)
-#define DEFAULT_CONSOLE_ROWS    (30)
-
-#define DEFAULT_TIMEOUT_SECONDS (10);
