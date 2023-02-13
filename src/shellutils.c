@@ -484,8 +484,83 @@ int32_t CreateDirectory(char_t* path)
     }
     return CMD_SUCCESS;
 
-
 }
+
+
+/*
+* Returns a dynamically allocated string (or Null) where the pattern substrings were
+* replaced with const char_t* replacement strings
+* I didnt wrtie this function
+*/
+char_t* StringReplace(const char_t* orig, const char_t* pattern, const char_t* replacement)
+{
+    if (orig == NULL || pattern == NULL) // if all is empty why bother
+    {
+        return NULL;
+    }
+    size_t patternLen = strlen(pattern);
+    if (patternLen == 0) // Empty pattern causes infinite loop with strstr
+    {
+        return NULL;
+    }
+    if (replacement == NULL) // Replace with nothing, if no replacement string is passed
+    {
+        replacement = "";
+    }
+    size_t replacementLen = strlen(replacement);
+    char_t* tmp = NULL; // Used for various things
+    const char_t* ins = orig; // Used as the next insertion point
+
+    int32_t repCount = 0; // Amount of replacements
+    for (repCount = 0; (tmp = strstr(ins, pattern)) != NULL; repCount++)
+    {
+        ins = tmp + patternLen;
+    }
+
+    char_t* result = malloc(strlen(orig) + (replacementLen - patternLen) * repCount + 1);
+    if (result == NULL)
+    {
+        return NULL;
+    }
+
+    // tmp points to the end of the result string
+    // ins points to the next occurence of the pattern in the original string
+    // orig points to the remainder of orig after the end of the pattern
+    tmp = result;
+    while (repCount--)
+    {
+        ins = strstr(orig, pattern);
+        int32_t lenUpToPattern = ins - orig;
+
+        tmp = strncpy(tmp, orig, lenUpToPattern) + lenUpToPattern;
+        tmp = strcpy(tmp, replacement) + replacementLen;
+
+        orig += lenUpToPattern + patternLen;
+    }
+    strcpy(tmp, orig);
+    return result;
+}
+
+
+/*
+* Prints space characters to fill and entire screen row, used
+* to overwrite dead text
+*/
+void PrintEmptyLine(void)
+{
+    if (!screenModeSet)
+    {
+        putchar('\n');
+        return;
+    }
+
+    // Including null char
+    int32_t amount = screenCols + 1;
+
+    char_t buf[amount];
+    memset(buf, ' ', amount);
+    buf[screenCols] = CHAR_NULL;
+    printf("%s", buf);
 
 
 
