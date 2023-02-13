@@ -206,6 +206,13 @@ efi_input_key_t GetInputKey(void)
     return key;
 }
 
+
+// check if given char is a printable value (ascii)
+boolean_t IsPrintableChar(const char_t c)
+{
+    return (c  >= ' ' && c <= '~');
+}
+
 // get an inputed string
 void GetInputString(char_t buffer[], const uint32_t maxInputSize, boolean_t hideInput)
 {
@@ -252,8 +259,12 @@ void GetInputString(char_t buffer[], const uint32_t maxInputSize, boolean_t hide
         }
        
     }
-    
+}
 
+// check if a char is a whitespace character
+boolean_t IsSpace(const char_t c)
+{
+    return (c == ' ' || c == CHAR_TAB);
 }
 
 
