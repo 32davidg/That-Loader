@@ -1,0 +1,18 @@
+#pragma once
+#include <uefi.h>
+
+typedef enum log_level_t{
+    LL_INFO,
+    LL_WARNINGS,
+    LL_ERROR
+}  log_level_t;
+
+int8_t InitLogger(void);
+void Log(log_level_t log_level, efi_status_t status, const char_t* fmtMessage, ...);
+const char_t* LogLevelString(log_level_t log_level);
+const char_t* EfiErrorString(efi_status_t status);
+time_t GetSecondsSinceInit(void);
+
+void PrintLogFile(void);
+
+
