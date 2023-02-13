@@ -344,6 +344,9 @@ boolean_t FindFlagAndDelete(cmd_args_s** argsHead, const char_t* flagStr)
     // If the flag is in the first node
     if (strcmp(args->argString, flagStr) == 0)
     {
+        *argsHead = args->next;
+        free(args->argString);
+        free(args);
         return TRUE;
     }
 
@@ -355,6 +358,10 @@ boolean_t FindFlagAndDelete(cmd_args_s** argsHead, const char_t* flagStr)
         // Check if the flag is in the current node
         if (strcmp(args->argString, flagStr) == 0)
         {
+            // Deleting the argument node
+            prev->next = args->next;
+            free(args->argString);
+            free(args);
             return TRUE;
         }
         // Advancing the list search
