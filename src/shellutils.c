@@ -292,6 +292,9 @@ char_t* TrimSpaces(char_t* str)
     return str;
 }
 
+/*
+* Remove following (toRemove) following chars from a string
+*/
 void RemoveRepeatedChars(char_t* str, char_t toRemove)
 {
     char_t* dest= str;
@@ -304,6 +307,25 @@ void RemoveRepeatedChars(char_t* str, char_t toRemove)
         *dest++ = *str++;
     }
     *dest = 0;
+}
+
+
+/*
+* Get the offset of a delimiter in a line (string)
+*/
+int32_t GetValueOffset(char_t* line, const char delimiter)
+{
+    char_t* curr = line;
+
+    for(; *curr != delimiter; curr++)
+    {
+        if(*curr == CHAR_NULL)
+        {
+            return -1;
+        }
+    }
+    curr ++; // pass delimiter
+    return (curr - line);
 }
 
 
