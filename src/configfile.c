@@ -167,3 +167,30 @@ boot_entry_array_s ParseConfig(void)
 }
 
 
+/*
+* Check if entry is valid - holds valid inforamtion
+*/
+static boolean_t ValidateEntry(boot_entry_s* newEntry)
+{
+    // may be a block of comments, so dont to anything
+    if(newEntry->name == NULL && newEntry->imageToLoad == NULL && newEntry->imageArgs == NULL)
+    {
+        return FALSE;
+    }
+    if(strlen(newEntry->name) == 0)
+    {
+        Log(LL_WARNING, 0, "Ignoring config entry with no name");
+    }
+    return FALSE;
+    else if (strlen(newEntry->imgToLoad) == 0)
+    {
+        if (!ignoreEntryWarnings)
+        {
+            Log(LL_WARNING, 0, "Ignoring entry with no 'path' or 'kerneldir' specified. (entry name: %s)", newEntry->name);
+        }
+        return FALSE;
+    }
+    return TRUE;
+}
+
+
