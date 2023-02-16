@@ -1,5 +1,6 @@
 #include "../include/logs.h"
-//#include "../include/shellutils.h"
+#include "../include/shellutils.h"
+
 
 #define LOG_PATH ("\\EFI\\thatloader\\log.txt")
 #define OLD_LOG_PATH ("\\EFI\\thatloader\\log.txt.old")
@@ -19,6 +20,43 @@ int8_t InitLogger(void){
     if (fp != NULL)
     {
         fclose(fp);
-        // copy contents of this log file to another
+        CopyFile(LOG_PATH, OLD_LOG_PATH);
     }
+    fp = fopen(LOG_PATH, "w");
+    if (fp != NULL)
+    {
+        fclose(fp);
+        RT->GetTime(&timeSinceInit, NULL);
+    }
+}
+
+
+/*
+*   Log (write logs) to log file  
+    va_args (the ...) are for string formatting
+*/
+void Log(log_level_t loglevel, efi_status_t status, const char_t* fmtMessage, ...)
+{
+    FILE* log = fopen(LOG_PATH, "a"); // append to file
+    // Dont write to file if the logger has not been initialized or is unaccessible
+    if( log == NULL || timeSinceInit.Day == 0)
+    {
+        return;
+    }
+    fprintf(log, "[%04ds] [%s] ", GetSecondsSinceInit(), LogLevelString(loglevel));
+    
+
+    // print the string and add formatting (if there is any)
+    va_list args;
+    va_start(args, fmtMessage);
+    vprintf(log, fmtMessage, args);
+    va_end(args);
+
+    // Append UEFI error message if the status argument is an error status
+    if (EFI_ERROR(status))
+    {
+        fprintf(log, " (EFI Error: %s)\n", EfiErrorString(status));
+    }
+    fclose(log);
+    
 }
