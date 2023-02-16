@@ -1,0 +1,8 @@
+
+*.efi
+vb/
+drive/
+.git/
+*.iso
+*.img
+
