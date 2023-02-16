@@ -3,7 +3,7 @@
 
 typedef enum log_level_t{
     LL_INFO,
-    LL_WARNINGS,
+    LL_WARNING,
     LL_ERROR
 }  log_level_t;
 
