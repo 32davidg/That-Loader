@@ -172,25 +172,57 @@ boot_entry_array_s ParseConfig(void)
 */
 static boolean_t ValidateEntry(boot_entry_s* newEntry)
 {
-    // may be a block of comments, so dont to anything
-    if(newEntry->name == NULL && newEntry->imageToLoad == NULL && newEntry->imageArgs == NULL)
+    // could be a block of comments, so dont print anything
+    if (newEntry->name == NULL && newEntry->imageToLoad == NULL && newEntry->imageArgs == NULL)
     {
         return FALSE;
     }
-    if(strlen(newEntry->name) == 0)
-    {
-        Log(LL_WARNING, 0, "Ignoring config entry with no name");
+
+    if (strlen(newEntry->name) == 0)
+    {   
+        if (!ignoreEntryWarnings)
+        {
+            Log(LL_WARNING, 0, "Ignoring unnamed entry");
+        }
+        return FALSE;
     }
-    return FALSE;
-    else if (strlen(newEntry->imgToLoad) == 0)
+    else if (strlen(newEntry->imageToLoad) == 0)
     {
         if (!ignoreEntryWarnings)
         {
-            Log(LL_WARNING, 0, "Ignoring entry with no 'path' or 'kerneldir' specified. (entry name: %s)", newEntry->name);
+            Log(LL_WARNING, 0, "Ignoring entry: %s, no 'path' or 'kerneldir' specified. ", newEntry->name);
         }
         return FALSE;
     }
     return TRUE;
+}
+
+/*
+*   This function appends a string to the entry argument
+*   Space is appended if args arent null
+*/
+static void AppendToArgs(boot_entry_s* entry, char_t* value)
+{
+    size_t argsLen = strlen(entry->imageArgs);
+    size_t valueLen = strlen(value);
+
+    // Resize args
+    size_t newSize = argsLen + valueLen +1;
+    entry->imageArgs = realloc(entry->imageArgs, newSize);
+
+    // make sure to add a null char if there are no args yet
+    if (argsLen == 0)
+    {
+        entry->imageArgs[argsLen] = CHAR_NULL;
+    }
+    else // add a space to seperate args
+    {
+        entry->imageArgs[argsLen] = ' ';
+        argsLen++;
+        entry->imageArgs[argsLen] = CHAR_NULL;
+    }
+    // append new arg
+    strncpy(entry->imageArgs + argsLen, value, valueLen);
 }
 
 
