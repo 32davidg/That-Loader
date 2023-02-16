@@ -90,3 +90,14 @@ time_t GetSecondsSinceInit(void)
     seconds += currTime.Second - timeSinceInit.Second;   
     return seconds;
 }
+
+// Print the log file
+void PrintLogFile(void)
+{
+    uint8_t res = PrintFileContents();
+    if (res != 0)
+    {
+        printf("Failed to open log file\n");
+    }
+}
+
