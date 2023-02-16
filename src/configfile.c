@@ -335,8 +335,24 @@ static boolean_t AssignValueToEntry(const char_t* key, char_t* value, boot_entry
     return TRUE;
 }
 
-/*
-* 
-*/
+// Special keys that control the settings of the bootmanager during runtime
+static boolean_t EditRuntimeConfig(const char_t* key, char_t* value)
+{
+    if (strcmp(key, "timeout") == 0)
+    {
+        bmcfg.timeoutSeconds = atoi(value);
+        if(bmcfg.timeoutSeconds == -1)
+        {
+            bmcfg.timeoutCancelled = TRUE;
+        }
+        else if (bmcfg.timeoutSeconds == 0)
+        {
+            bmcfg.bootImmediately = TRUE;
+        }
+        return TRUE;
+    }
+    return FALSE;
+}
+
 
 
