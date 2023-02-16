@@ -1,6 +1,7 @@
 #include "../include/logs.h"
 #include "../include/shellutils.h"
 
+#define THAT_LOADER_NAME_STR "ThatLoader"
 
 #define LOG_PATH ("\\EFI\\thatloader\\log.txt")
 #define OLD_LOG_PATH ("\\EFI\\thatloader\\log.txt.old")
@@ -27,7 +28,17 @@ int8_t InitLogger(void){
     {
         fclose(fp);
         RT->GetTime(&timeSinceInit, NULL);
+
+        // Print the date of the log and boot maganger's name
+        Log(LL_INFO, 0, "Starting %s", THAT_LOADER_NAME_STR);
+        Log(LL_INFO, 0, "Log date: %02d/%02d/%04d %02d:%02d:%02d",
+        timeSinceInit.Day, timeSinceInit.Month, timeSinceInit.Year, 
+        timeSinceInit.Hour, timeSinceInit.Minute, timeSinceInit.Second);
+
+        return 1;
     }
+
+    return 0;
 }
 
 
