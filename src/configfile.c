@@ -116,13 +116,54 @@ boot_entry_array_s ParseConfig(void)
             // Ignore comments
             if (line[0] == CFG_COMMENT_CHAR)
             {
-                
+                continue;
             }
+
+            // Get the key-value pair in the line
+            char_t* key = NULL;
+            char_t* value = NULL;
+            if(ParseKeyValuePair(line, CFG_KEY_VALUE_DELIMITER, &key, &value) == FALSE)
+            {
+                free(key);
+                free(value);
+                continue;
+            }
+
+            // Trim spaces before passing into AssignValueToEntry
+            const char_t* trimmedkey = TrimSpaces(key);
+            const char_t* trimmedvalue = TrimSpaces(value);
+            if(!AssignValueToEntry(trimmedkey, trimmedvalue, &entry))
+            {
+                // free the value if it wasnt assigned (key stays)
+                free(value);
+            }
+            free(key);
+        }
+        free(strippedEnty);
+
+        //Fill the data, ketnel path, version and args
+        if(entry.isDirectoryToKernel)
+        {
+            PrepareKernelDirEntry(&entry);
         }
 
-
-
+        // Make sure the entry is valid, if it is, append it to array of entries
+        if(ValidateEntry(&entry))
+        {
+            AppendEntry(&bootEntryArr, &entry);
+        }
+        else // free memory of invalid entry
+        {
+            FreeConfigEntry(&entry);
+        }
+        filePtr += ptrIncrement;
     }
+    free(configData);
+    if(bootEntryArr.numOfEntries ==0)
+    {
+        Log(LL_ERROR, 0, "The configuration file is has incorrect entries or is empty");
+    }
+    return bootEntryArr;
 }
 
 
