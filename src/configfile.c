@@ -225,4 +225,118 @@ static void AppendToArgs(boot_entry_s* entry, char_t* value)
     strncpy(entry->imageArgs + argsLen, value, valueLen);
 }
 
+/*
+* This function assignes char_t* values to boot_entry_s* based on const char_t* key
+* FALSE as return value means the value wasnt assigned and needs to be freed
+* TRUE means the value was assigned, and doesnt need to be freed
+*/
+static boolean_t AssignValueToEntry(const char_t* key, char_t* value, boot_entry_s* entry)
+{
+    //Igonre empty values
+    if(value[0] == CHAR_NULL)
+    {
+        Log(LL_WARNING, 0, "Ignoring empty lines by key: '%s'.", key);
+        return FALSE;
+    }
+
+    // kernel's name
+    if(strcmp(key, "name") == 0) // if value holds the name
+    {
+        if(entry->name != NULL)
+        {
+            LogKeyRedefinition(key, entry->name, value);
+            return FALSE;
+        }
+        // Shorten the name of it is too long
+        if(strlen(value) > MAX_ENTRY_NAME_LEN)
+        {
+            value[MAX_ENTRY_NAME_LEN] = CHAR_NULL;
+        }
+        entry->name = value;
+    }
+
+    // path to kernel image
+    else if (strcmp(key,"path") == 0)
+    {
+        if(entry->isDirectoryToKernel)
+        {
+            Log(LL_WARNING, 0, "'%s' and 'kerneldir' defined in the same entry. (where kerneldir=%s)",
+            key, entry->kernelScanInfo->kernelDirectory);
+            return FALSE;
+        }
+        if(entry->imageToLoad != NULL)
+        {
+            LogKeyRedefinition(key, entry->imageToLoad, value);
+            return FALSE;
+        }
+        entry->imageToLoad = value;
+    }
+
+    // path to kernel directory
+    else if (strcmp(key, "kerneldir") == 0)
+    {
+        if(entry->imageToLoad != NULL)
+        {
+            Log(LL_WARNING, 0, "'%s' and 'path' defined in the same entry. (where path=%s)",
+            key, entry->imageToLoad);
+            return FALSE;
+
+        }
+        if(entry->isDirectoryToKernel)
+        {
+            LogKeyRedefinition(key, entry->kernelScanInfo->kernelDirectory, value);
+            return FALSE;
+        }
+        
+        entry->kernelScanInfo = malloc(sizeof(kernel_scan_info_s));
+        entry->kernelScanInfo->kernelDirectory = value;
+        entry->isDirectoryToKernel = TRUE;
+    }
+
+    // add args to kernel loading args
+    else if(strcmp(key, "args") == 0)
+    {
+        AppendToArgs(entry, value);
+    }
+
+    // This key simplifies the configuration but it just takes the value and adds it to the args
+    else if (strcmp(key, "initrd") == 0)
+    {
+        size_t initrdLen = strlen(INITRD_ARG_STR);
+        size_t valueLen = strlen(value);
+        const size_t totalLen = initrdLen + valueLen + 1;
+
+        // Create the full arg string 'initrd=<value>'
+        char_t* argStr = (char_t*) malloc(totalLen * sizeof(char_t));
+        if(argStr == NULL)
+        {
+            Log(LL_ERROR, 0, "Failed to allocate memory for buffer");
+            return FALSE;
+        }
+        strncpy(argStr, INITRD_ARG_STR, initrdLen);
+        strncpy(argStr + initrdLen, value, valueLen);
+        AppendToArgs(entry, argStr);
+        free(argStr);
+    }
+    else
+    {
+        boolean_t isRuntimeCfgKey = EditRuntimeConfig(key, value);
+        if (!isRuntimeCfgKey)
+        {
+            Log(LL_WARNING, 0, "Unknown key '%s' in the config file", key);
+        }
+        else 
+        {
+            // Avoid false warnings when runtime config keys are on their own
+            ignoreEntryWarnings = TRUE;
+        }
+        return FALSE;
+    }
+    return TRUE;
+}
+
+/*
+* 
+*/
+
 
