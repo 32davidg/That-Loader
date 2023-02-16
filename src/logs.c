@@ -43,8 +43,10 @@ int8_t InitLogger(void){
 
 
 /*
+
 *   Log (write logs) to log file  
     va_args (the ...) are for string formatting
+    status parameter is optinal and can be set to 0
 */
 void Log(log_level_t loglevel, efi_status_t status, const char_t* fmtMessage, ...)
 {
@@ -70,4 +72,21 @@ void Log(log_level_t loglevel, efi_status_t status, const char_t* fmtMessage, ..
     }
     fclose(log);
     
+}
+
+// literally just get the seconds since the initation
+time_t GetSecondsSinceInit(void)
+{
+    efi_time_t currTime = {0};
+    efi_status_t status = RT->GetTime(&currTime, NULL);
+    if(EFI_ERROR(status))
+    {
+        return 0;
+    }
+    time_t seconds = 0;
+    seconds += (currTime.Day - timeSinceInit.Day) * SECONDS_IN_DAY;
+    seconds += (currTime.Hour - timeSinceInit.Hour) * SECONDS_IN_HOUR;
+    seconds += (currTime.Minute - timeSinceInit.Minute) * SECONDS_IN_MINUTE;
+    seconds += currTime.Second - timeSinceInit.Second;   
+    return seconds;
 }
