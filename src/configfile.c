@@ -525,9 +525,15 @@ static char_t* GetKernelVersionString(const char_t* fullKernelFileName)
 
     strncpy(versionString, startOfVersion, versionStrLen);
     return versionString;
-
-
 }
+
+
+static inline void LogKeyRedefinition(const char_t* key, const char_t* curr, const char_t* ignored)
+{
+    Log(LL_WARNING, 0, "Ignoring '%s' redefinition in the same config entry. (current=%s, ignored=%s)", 
+        key, curr, ignored);
+}
+
 
 
 
