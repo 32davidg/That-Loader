@@ -488,6 +488,46 @@ static char_t* GetPathToKernel(const char_t* directoryPath)
     return path;
 }
 
+/*
+*   get the kernel version string from the full kernel name
+*/
+static char_t* GetKernelVersionString(const char_t* fullKernelFileName)
+{
+    char_t* kernelFileName = strrchr(fullKernelFileName, '\\') +1;
+
+    // Skip past the kernel file name
+    kernelFileName += strlen(LINUX_KERNEL_IDENTIFIER_STR);
+
+    // next char is version delimiter
+    char_t versionDelimiter = *kernelFileName;
+    if(versionDelimiter == CHAR_NULL)
+    {
+        retunr NULL;
+    }
+    kernelFileName++;
+
+    // Store the pointer to where the version starts for later
+    char_t* startOfVersion = kernelFileName;
+
+    // Find where the version string ends
+    while(*kernelFileName != versionDelimiter && *kernelFileName != CHAR_NULL)
+    {
+        kernelFileName++;
+    }
+
+    // Store the version string in a dynamic buffer
+    int32_t versionStrLen = kernelFileName - startOfVersion;
+    char_t* versionString = malloc(versionStrLen + 1);
+    if (versionString == NULL)
+    {
+        return NULL;
+    }
+
+    strncpy(versionString, startOfVersion, versionStrLen);
+    return versionString;
+
+
+}
 
 
 
