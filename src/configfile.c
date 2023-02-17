@@ -471,17 +471,21 @@ static char_t* GetPathToKernel(const char_t* directoryPath)
                 break;
             }
         }
-    }
-    if(kernelName == NULL)
-    {
-        Log(LL_ERROR, 0, "Linx Kernel not found in directory (dir='%s')", directoryPath); 
+        if(kernelName == NULL)
+        {
+            Log(LL_ERROR, 0, "Linx Kernel not found in directory (dir='%s')", directoryPath); 
+            closedir(dir);
+            return path;
+        }
+        // Create a full path to the kernel file
+        path = ConcatPaths(directoryPath, kernelName);
         closedir(dir);
-        return path;
     }
-
-    // Create a full path to the kernel file
-    path = ConcatPaths(directoryPath, kernelName);
-    closedir(dir);
+    else{
+        Log(LL_ERROR, 0, "Failed to open directory '%s', to kernel: '%s'", directoryPath,
+        GetCommandErrorInfo(errno));
+    }
+    return path;
 }
 
 
