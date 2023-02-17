@@ -450,6 +450,41 @@ static void PrepareKernelDirEntry(boot_entry_s* entry)
     }
 }
 
+/*
+* this function returns the path to a loadable image located in a given 
+* directory path (const char_t* directoryPath)
+*/
+static char_t* GetPathToKernel(const char_t* directoryPath)
+{
+    char_t* path = NULL;
+    char_t* kernelName = NULL;
+
+    DIR* dir;
+    struct dirent* de;
+    if ((dir = opendir(directoryPath)) != NULL)
+    {
+        while ((de = readdir(dir)) != NULL)
+        {
+            if(strstr(de->d_name, LINUX_KERNEL_IDENTIFIER_STR) != NULL)
+            {
+                kernelName = de->d_name;
+                break;
+            }
+        }
+    }
+    if(kernelName == NULL)
+    {
+        Log(LL_ERROR, 0, "Linx Kernel not found in directory (dir='%s')", directoryPath); 
+        closedir(dir);
+        return path;
+    }
+
+    // Create a full path to the kernel file
+    path = ConcatPaths(directoryPath, kernelName);
+    closedir(dir);
+}
+
+
 
 
 
