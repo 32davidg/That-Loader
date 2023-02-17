@@ -421,4 +421,39 @@ static void AppendEntry(boot_entry_array_s* bootEntryArr, boot_entry_s* entry)
 
 }
 
+/*
+*   Used when entry->isDirectoryToKernel is set to TRUE and we have to fill the rest of the entry data
+*   Scan the directory of the kernel and fill args and image
+*/
+static void PrepareKernelDirEntry(boot_entry_s* entry)
+{
+    kernel_scan_info_s* scanInfo = entry->kernelScanInfo;
+
+    entry->imageToLoad = GetPathToKernel(scanInfo->kernelDirectory);
+    scanInfo->kernelVersionString = GetKernelVersionString(entry->imageToLoad);
+
+    if(scanInfo->kernelVersionString != NULL)
+    {
+        // Put the kernel version string where needed
+        char_t* newArgs = StringReplace(entry->imageArgs, STR_TO_SUBSTITUTE_WITH_VERSION,
+        scanInfo->kernelVersionString);
+        // Replace old args list with new one if replacement func succeeded
+        if (newArgs != NULL)
+        {
+            free(entry->imageArgs);
+            entry->imageArgs = newArgs;
+        }
+        else{
+            Log(LL_ERROR, 0, "Failed to detect kernel version. Exiting (kerneldir=%s, kernel=%s)",
+            scanInfo->kernelDirectory, entry->imageToLoad);
+        }
+    }
+}
+
+
+
+
+
+
+
 
