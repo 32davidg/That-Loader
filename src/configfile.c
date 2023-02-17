@@ -354,5 +354,41 @@ static boolean_t EditRuntimeConfig(const char_t* key, char_t* value)
     return FALSE;
 }
 
+/*
+* This function parses the key and value from a line in the config file
+* key and value are output parameters (we write into them)
+* FALSE means there was a failure and the caller has to free the key or value
+*/
+boolean_t ParseKeyValuePair(char_t* token, const char_t delimiter, char_t** key, char_t** value)
+{
+    int32_t valueOffset = GetValueOffset(token, delimiter);
+    if (valueOffset == -1)
+    {
+        return FALSE;
+    }
+    size_t tokenLen = strlen(token);
+    size_t valueLength = tokenLen - valueOffset;
+    // Ignore empty values or keys without a value
+    if (tokenLen ==0 || valueLength == 0)
+    {
+        return FALSE;
+    }
+
+    *key = malloc(valueOffset);
+    if(*key == NULL)
+    {
+        Log(LL_ERROR, 0, "Failed to allocate memory for key string");
+    }
+    *value = malloc(valueLength +1);
+    if(*value == NULL)
+    {
+        Log(LL_ERROR, 0, "Failed to allocate memory for value string");
+    }
+
+    strncpy(*key, token, valueOffset -1);
+    strncpy(*value, token + valueOffset, valueLength);
+    return TRUE;
+}
+
 
 
