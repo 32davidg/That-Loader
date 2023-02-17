@@ -1,8 +1,10 @@
 #include "../include/bootmenu.h"
-#include "../include/ErrorCodes.h"
-#include "../include/efilibs.h"
+#include "../include/shellutils.h"
+#include "../include/configfile.h"
+#include "../include/logs.h"
 #include "../include/bootutils.h"
 #include "../include/display.h"
+
 
 
 // Temp forward declarations
@@ -17,7 +19,6 @@ void StartBootManager()
 {
 
     InitBootMenuOutput();
-    // for later, when reading from config file
     while(TRUE)
     {
         
