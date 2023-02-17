@@ -390,5 +390,35 @@ boolean_t ParseKeyValuePair(char_t* token, const char_t delimiter, char_t** key,
     return TRUE;
 }
 
+/*
+* add an entry to the end of the entries array
+* simply put: it reallocates the current boot entry array, adds a new boot entry, and copies the given
+* boot_entry_s* entry to the new entry
+*/
+static void AppendEntry(boot_entry_array_s* bootEntryArr, boot_entry_s* entry)
+{
+    // re-allocate memory for in the entry arrays
+    bootEntryArr->entryArray = realloc(bootEntryArr->entryArray, sizeof(boot_entry_s) * (bootEntryArr->numOfEntries + 1));
+
+    int32_t at = bootEntryArr->numOfEntries;
+    boot_entry_s* newEntry = bootEntryArr->entryArray + at;
+
+    // Copy the values from the static entry to the entry in the array
+    newEntry->name = entry->name;
+    newEntry->imageToLoad = entry->imageToLoad;
+    newEntry->imageArgs = entry->imageArgs;
+    newEntry->isDirectoryToKernel = entry->isDirectoryToKernel;
+
+    if(newEntry->isDirectoryToKernel)
+    {
+        newEntry->kernelScanInfo = entry->kernelScanInfo;
+    }
+    else
+    {
+        newEntry->kernelScanInfo = NULL;
+    }
+    bootEntryArr->numOfEntries++;
+
+}
 
 
