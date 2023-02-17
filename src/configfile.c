@@ -534,6 +534,34 @@ static inline void LogKeyRedefinition(const char_t* key, const char_t* curr, con
         key, curr, ignored);
 }
 
+/*
+* Free the memory allocated for the config entries
+*/
+static void FreeConfigEntry(boot_entry_s* entry)
+{
+    free(entry->name);
+    free(entry->imageToLoad);
+    free(entry->imageArgs);
+
+    if(entry->isDirectoryToKernel)
+    {
+        // free the scan info
+        free(entry->kernelScanInfo->kernelVersionString);
+        free(entry->kernelScanInfo->kernelDirectory);
+        free(entry->kernelScanInfo);
+    }
+}
+/*
+* free the config entries (in the entries linked list)
+*/
+void FreeConfigEntries(boot_entry_array_s* entryArr)
+{
+    for(int32_t i = 0; i < entryArr->numOfEntries; i++)
+    {
+        FreeConfigEntry(&entryArr->entryArray[i]);
+    }
+    free(entryArr->entryArray);
+}
 
 
 
