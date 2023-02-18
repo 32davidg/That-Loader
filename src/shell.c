@@ -268,7 +268,7 @@ static int8_t SplitArgsString(char_t buffer[], cmd_args_s** outputArgs)
     {
         return CMD_SUCCESS;
     }
-
+    // create a new argument node
     cmd_args_s* node = InitializeArgsNode();
     if(node == NULL)
     {
