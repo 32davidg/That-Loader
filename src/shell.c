@@ -175,7 +175,8 @@ static char_t* GetCommandFromBuffer(char_t* buffer[])
 
 /*
 * Parses the args using an index.
-* god knows what i did here
+* loads input args to a buffer, and reads through it
+* splits arguments when reading a space char
 */
 static int8_t ParseArgs(char_t* inputArgs, cmd_args_s** outputArgs)
 {
@@ -210,16 +211,16 @@ static int8_t ParseArgs(char_t* inputArgs, cmd_args_s** outputArgs)
             }
             else // add the quotation mark if its in the middle of the arg string
             {
-                //goto addChar;
+                goto addChar;
             }
         }
-        // Split args
+        // Split args - current char is space
         else if (inputArgs[i] == SPACE)
         {
             //if the quotation mark are opened, and a space char is hit, well keep it
             if(quotationMarkOpened)
             {
-                //goto addChar;
+                goto addChar;
             }
             else{
                 int8_t res = SplitArgsString(tempBuffer, outputArgs);
