@@ -185,6 +185,7 @@ uint64_t GetFileSize(FILE* file)
 /*
 * Waits a certain number of ms (timeoutms) before returning
 * or returning on key press
+* (create a 10 second timer event, if a keypress is registered, cancell timer and return)
 */
 int32_t WaitForInput(uint32_t timeout)
 {
@@ -209,7 +210,7 @@ int32_t WaitForInput(uint32_t timeout)
         Log(LL_ERROR, status, "Failed to set timer event (for %d milliseconds).", timeout);
         return INPUT_TIMER_ERROR;
     }
-
+    // wait for input event
     status = BS->WaitForEvent(2, events, &idx);
     BS->CloseEvent(*timerEvent);
 
@@ -226,4 +227,13 @@ int32_t WaitForInput(uint32_t timeout)
 
   
 
+}
+
+void DisableWatchdogTimer(void)
+{
+    efi_status_t status = BS->SetWatchdogTimer(0, 0,0, NULL);
+    if(EFI_ERROR(status))
+    {
+        Log(LL_WARNING, status, "Failed to disable watchdog timer.");
+    }
 }
