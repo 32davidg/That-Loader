@@ -1,6 +1,32 @@
 #include "../include/bootutils.h"
 #include "../include/logs.h"
 
+
+
+
+/*
+*   Convert normal string to wide string
+*   normal string uses 1 byte per char
+*   wide string uses 2 bytes per char (to represent diffrent types of chars like hebrew, arabics, chinese, etc)
+*/
+wchar_t* StringToWideString(char_t* str)
+{
+    // The size has to be multiplied by the size of wchar_t
+    // because wchar_t is 2 bytes, while char_t is 1 byte
+    const size_t size = strlen(str) * sizeof(wchar_t);
+    wchar_t* wpath = malloc(size + 1);
+    if (wpath == NULL)
+    {
+        Log(LL_ERROR, 0, "Failed to allocate memory for wide string");
+        return NULL;
+    }
+
+    wpath[size] = 0;
+    mbstowcs(wpath, str, size);
+    return wpath;
+
+}
+
 /*
 *   Get a file device handler
 *   Used when loading a filesystem (to acsses file in the filesystem)
@@ -237,3 +263,4 @@ void DisableWatchdogTimer(void)
         Log(LL_WARNING, status, "Failed to disable watchdog timer.");
     }
 }
+

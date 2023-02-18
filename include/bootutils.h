@@ -23,5 +23,6 @@ uint64_t GetFileSize(FILE* file);
 //efi_status_t RebootDevice(boolean_t rebootToFirmware);
 int32_t WaitForInput(uint32_t timeout);
 
+// watchdog timer makes sure that the app doesnt go to a complete freeze, if it does - it resets the system
 void EnableWatchdogTimer(uintn_t seconds);
 void DisableWatchdogTimer(void);
