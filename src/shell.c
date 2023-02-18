@@ -145,6 +145,34 @@ static int8_t ProcessCommand(char_t buffer[], char_t** currPathPtr)
 }
 
 
+/*
+* Get the actual command keyword from a buffer (and return it)
+*/
+static char_t* GetCommandFromBuffer(char_t* buffer[])
+{
+    size_t bufferLen = strlen(buffer);
+    if(bufferLen == 0)
+    {
+        return NULL;
+    }
+
+    int32_t cmdLen = 0;
+    int32_t cmdoffset = GetValueOffset(buffer, ' ');
+    if(cmdoffset == -1)
+    {
+        cmdLen = bufferLen +1;
+    }
+    else
+    {
+        cmdLen = cmdoffset;
+    }
+
+    char_t* cmd = malloc(cmdLen);
+    strncpy(cmd, buffer, cmdLen -1);
+
+    return cmd;
+}
+
 
 
 
