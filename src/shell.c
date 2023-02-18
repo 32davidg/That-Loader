@@ -298,6 +298,24 @@ static int8_t SplitArgsString(char_t buffer[], cmd_args_s** outputArgs)
 
 }
 
+/*
+* construct an arg node (all pointer initialized to NULL)
+*/
+static cmd_args_s* InitializeArgsNode(void)
+{
+    cmd_args_s* node = malloc(sizeof(cmd_args_s));
+    if(node == NULL)
+    {
+        Log(LL_ERROR, 0, "Failed to initialize argument node.");
+    }
+    else
+    {
+        node->argString = NULL;
+        node->next = NULL;
+    }
+    return node;
+}
+
 
 
 
