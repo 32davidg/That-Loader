@@ -316,6 +316,21 @@ static cmd_args_s* InitializeArgsNode(void)
     return node;
 }
 
+/*
+* Free argument list (non-recurvively)
+*/
+static void FreeArgs(cmd_args_s* args)
+{
+    while(args != NULL)
+    {
+        cmd_args_s* next = args->next;
+        free(args->argString);
+        free(args);
+
+        args = next;
+    }
+}
+
 
 
 
