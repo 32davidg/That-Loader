@@ -173,6 +173,89 @@ static char_t* GetCommandFromBuffer(char_t* buffer[])
     return cmd;
 }
 
+/*
+* Parses the args using an index.
+* god knows what i did here
+*/
+static int8_t ParseArgs(char_t* inputArgs, cmd_args_s** outputArgs)
+{
+    if(inputArgs == NULL)
+    {
+        return CMD_SUCCESS;
+    }
+
+    const size_t argsLen = strlen(inputArgs);
+    char_t tempBuffer[SHELL_MAX_INPUT] = {0};
+    uint8_t bufferIdx = 0; // ccurrent index of the buffer where the next char is stoerd
+
+    boolean_t quotationMarkOpened = FALSE;
+    for(size_t i = 0; i <= argsLen; i++)
+    {
+        if (inputArgs[i] == QUOTATION_MARK)
+        {
+            // if the quotation mark is the last char in the arg
+            if (quotationMarkOpened && (inputArgs[i+1] == SPACE || inputArgs[i+1] == CHAR_NULL))
+            {
+                int8_t res = SplitArgsString(tempBuffer, outputArgs);
+                if (res != CMD_SUCCESS)
+                {
+                    return res;
+                }
+                quotationMarkOpened = FALSE;
+            }
+            // If the quotation mark is the first char in the argument
+            else if( i==0 || inputArgs[i-1] == SPACE)
+            {
+                quotationMarkOpened = TRUE;
+            }
+            else // add the quotation mark if its in the middle of the arg string
+            {
+                //goto addChar;
+            }
+        }
+        // Split args
+        else if (inputArgs[i] == SPACE)
+        {
+            //if the quotation mark are opened, and a space char is hit, well keep it
+            if(quotationMarkOpened)
+            {
+                //goto addChar;
+            }
+            else{
+                int8_t res = SplitArgsString(tempBuffer, outputArgs);
+                if(res != CMD_SUCCESS)
+                {
+                    return res;
+                }
+                bufferIdx = 0; // Reset buffer index
+            }
+
+        }
+        else if(inputArgs[i] == CHAR_NULL)
+        {
+            // quotation mark wasnt closed
+            if(quotationMarkOpened)
+            {
+                return CMD_QUOTATION_MARK_OPEN;
+            }
+            else
+            {
+                int8_t res = SplitArgsString(tempBuffer, outputArgs);
+                if (res != CMD_SUCCESS)
+                {
+                    return res;
+                }
+            }
+        }
+        else{
+            addChar:
+                tempBuffer[bufferIdx] = inputArgs[i];
+                bufferIdx++;
+        }
+    }
+    return CMD_SUCCESS;
+}
+
 
 
 
