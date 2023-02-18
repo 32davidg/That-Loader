@@ -72,7 +72,82 @@ int8_t StartShell(void)
 }
 
 
+/*
+* Run an infinate loop, reading command to buffer
+* pass command to ProcessCommand func
+*/
 static int8_t ShellLoop(char_t** currPathPtr)
 {
+    while (TRUE)
+    {
+        char_t* buffer[SHELL_MAX_INPUT] = {0};
+        printf("> ");
+
+        GetInputString(buffer, SHELL_MAX_INPUT, FALSE);
+
+        if(strcmp(buffer, SHELL_EXIT_STR) == 0)
+        {
+            break;
+        }
+        if(ProcessCommand(buffer, currPathPtr) == 1)
+        {
+            return CMD_OUT_OF_MEMORY;
+        }
     
+    }
+    return CMD_SUCCESS;
 }
+
+static int8_t ProcessCommand(char_t buffer[], char_t** currPathPtr)
+{
+    buffer = TrimSpaces(buffer);
+
+    char_t* args = buffer;
+    char_t* cmd = GetCommandFromBuffer(buffer);
+
+    if( cmd == NULL)
+    {
+        return 0;
+    }
+
+    // Parse the arguments into a linked list (if there are any)
+    cmd_args_s* cmdArgs = NULL;
+    if(args != NULL)
+    {
+        int8_t res = ParseArgs(args, &cmdArgs);
+        if(res != CMD_SUCCESS)
+        {
+            PrintCommandError(cmd, args, res);
+            return res;
+        }
+    }
+
+    const uint8_t* allCmds = CommandCount();
+    for (uint8_t i = 0; i < allCmds; i++)
+    {
+        // Find the right command and execute the command function
+        if(strcmp(cmd, commands[i].commandName) == 0)
+        {
+            // Pass a pointer to the head of the linked list since it might be modified
+            commands[i].CommandFunction(&cmdArgs, currPathPtr);
+            break;
+        }
+        else if (i+1 == allCmds)
+        {
+            printf("Command '%s' not found\n", commands[i].commandName);
+
+        }
+    }
+
+    free(cmd);
+    FreeArgs(cmdArgs);
+    return CMD_SUCCESS;
+}
+
+
+
+
+
+
+
+
