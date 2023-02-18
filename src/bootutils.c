@@ -181,3 +181,49 @@ uint64_t GetFileSize(FILE* file)
     return info.FileSize;
 
 }
+
+/*
+* Waits a certain number of ms (timeoutms) before returning
+* or returning on key press
+*/
+int32_t WaitForInput(uint32_t timeout)
+{
+    // The first index is for the timer event, and the second is for WaitForKey event
+    uintn_t idx;
+    efi_event_t events[2];
+
+
+    efi_event_t* timerEvent = events;  // Index 0 (Timer)
+    events[1] = ST->ConIn->WaitForKey; // Index 1 (Input)
+
+    efi_status_t status = BS->CreateEvent(EVT_TIMER, 0, NULL, NULL, timerEvent);
+    if (EFI_ERROR(status))
+    {
+        Log(LL_ERROR, status, "Failed to create timer event.");
+        return INPUT_TIMER_ERROR;
+    }
+
+    status = BS->SetTimer(*timerEvent, TimerRelative, timeout * 10000);
+    if(EFI_ERROR(status))
+    {
+        Log(LL_ERROR, status, "Failed to set timer event (for %d milliseconds).", timeout);
+        return INPUT_TIMER_ERROR;
+    }
+
+    status = BS->WaitForEvent(2, events, &idx);
+    BS->CloseEvent(*timerEvent);
+
+    if(EFI_ERROR(status))
+    {
+        Log(LL_ERROR, status, "Failed to set for timer event.");
+        return INPUT_TIMER_ERROR;
+    }
+    else if(idx == 1)
+    {
+        return INPUT_TIMER_KEY;
+    }
+    return INPUT_TIMER_TIMEOUT;
+
+  
+
+}

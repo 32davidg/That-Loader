@@ -20,7 +20,7 @@ efi_status_t GetFileInfo(efi_file_handle_t* fileHandle, efi_file_info_t* fileInf
 char_t* GetFileContent(char_t* path, uint64_t* outFileSize);
 uint64_t GetFileSize(FILE* file);
 
-efi_status_t RebootDevice(boolean_t rebootToFirmware);
+//efi_status_t RebootDevice(boolean_t rebootToFirmware);
 int32_t WaitForInput(uint32_t timeout);
 
 void EnableWatchdogTimer(uintn_t seconds);

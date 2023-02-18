@@ -103,13 +103,20 @@ static void FailMenu(const char_t* errorMsg)
                 if(GetKey('4') == 1)
                 {
                     // warm reboot
-                    ST->RuntimeServices->ResetSystem(EfiResetWarm, EFI_SUCCESS, 0, 0);
+                    ClearScreen();
+                    Log(LL_INFO, 0, "Warm resetting machine...");
+                    efi_status_t status = ST->RuntimeServices->ResetSystem(EfiResetWarm, EFI_SUCCESS, 0, 0);
+                    Log(LL_ERROR, status, "Failed to reboot machine");
                     break;            
                 }
                 if(GetKey('5') == 1)
                 {
+                    ClearScreen();
+                    Log(LL_INFO, 0, "Shutting down machine...");
                     //shutdown
                     ST->RuntimeServices->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, 0);
+                    Log(LL_ERROR, status, "Failed to reboot machine");
+
                     break;
                 }
             }
