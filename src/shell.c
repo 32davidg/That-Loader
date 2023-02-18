@@ -257,6 +257,47 @@ static int8_t ParseArgs(char_t* inputArgs, cmd_args_s** outputArgs)
     return CMD_SUCCESS;
 }
 
+/*
+* Copy an argument from buffer, and add it to the end of the args list (outputArgs)
+* Hey if ur reading this these parsing functions are killing me
+*/
+static int8_t SplitArgsString(char_t buffer[], cmd_args_s** outputArgs)
+{
+    // IF the buffer is empty dont do anything
+    if(buffer[0] == NULL)
+    {
+        return CMD_SUCCESS;
+    }
+
+    cmd_args_s* node = InitializeArgsNode();
+    if(node == NULL)
+    {
+        return CMD_OUT_OF_MEMORY;
+    }
+    // Allocate memory for the arg string and copy buffer to it
+    const size_t bufferLen = strlen(buffer);
+    node->argString = malloc(bufferLen + 1);
+    if(node->argString == NULL)
+    {
+        Log(LL_ERROR, 0, "Failed to allocate memory for argument string.");
+        return CMD_OUT_OF_MEMORY;
+    }
+    strncpy(node->argString, buffer, bufferLen);
+
+    // Append to the linked list or set the node as the head if hasnt been initialized yet
+    if(*outputArgs == NULL)
+    {
+        *outputArgs = node;
+    }
+    else{
+        AppendArgsNode(*outputArgs, node);
+    }
+
+    memset(buffer, 0, SHELL_MAX_INPUT);
+    return CMD_SUCCESS;
+
+}
+
 
 
 
