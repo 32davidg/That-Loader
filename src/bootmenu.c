@@ -139,7 +139,7 @@ static void FailMenu(const char_t* errorMsg)
                 Log(LL_INFO, 0, "Shutting down machine...");
                 // shutdown
                 ST->RuntimeServices->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, 0);
-                Log(LL_ERROR, status, "Failed to shutdown machine");
+                Log(LL_ERROR, 0, "Failed to shutdown machine");
                 break;
             default:
                 // nothing
