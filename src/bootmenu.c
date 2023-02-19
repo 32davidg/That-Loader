@@ -5,6 +5,7 @@
 #include "../include/bootutils.h"
 #include "../include/display.h"
 #include "../include/shell.h"
+#include "../include/LoadImage.h"
 
 #define F5_KEY_SCANCODE (0x0F) // Used to refresh the menu (reparse config)
 
