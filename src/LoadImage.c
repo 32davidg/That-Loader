@@ -11,7 +11,7 @@ void ChainloadImage(char_t* path, char_t* args)
     efi_handle_t devHandle = GetFileDeviceHandle(path);
     if(devHandle == NULL)
     {
-        Log(LL_ERROR,0,  "Unable to find device handle in chainloading process '%s'.", path);
+        Log(LL_ERROR, 0, "Unable to find device handle in chainloading process '%s'.", path);
         return;
     }
 

@@ -131,7 +131,7 @@ boot_entry_array_s ParseConfig(void)
 
             // Trim spaces before passing into AssignValueToEntry
             const char_t* trimmedkey = TrimSpaces(key);
-            const char_t* trimmedvalue = TrimSpaces(value);
+            char_t* trimmedvalue = TrimSpaces(value);
             if(!AssignValueToEntry(trimmedkey, trimmedvalue, &entry))
             {
                 // free the value if it wasnt assigned (key stays)

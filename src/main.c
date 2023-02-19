@@ -1,6 +1,6 @@
-#include "include\bootmenu.h"
-#include "include\logs.h"
-#include "include\display.h"
+#include "..\include\bootmenu.h"
+#include "..\include\logs.h"
+#include "..\include\display.h"
 
 int main(int argc, char **argv)
 {
