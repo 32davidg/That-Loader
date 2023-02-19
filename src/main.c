@@ -4,6 +4,8 @@
 
 int main(int argc, char **argv)
 {
+    ST->ConOut->ClearScreen(ST->ConOut);
+    printf("Hello world!\n");
     if(!InitLogger())
     {
         printf("Failed to initialize logs, guess logs are now disabled\n");
