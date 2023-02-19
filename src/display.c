@@ -1,6 +1,7 @@
 #include "display.h"
 #include "logs.h"
 #include "bootutils.h"
+#include "bootmenu.h"
 
 uintn_t screenRows = DEFAULT_CONSOLE_ROWS;
 uintn_t screenCols = DEFAULT_CONSOLE_COLUMNS;
