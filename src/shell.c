@@ -264,7 +264,7 @@ static int8_t ParseArgs(char_t* inputArgs, cmd_args_s** outputArgs)
 static int8_t SplitArgsString(char_t buffer[], cmd_args_s** outputArgs)
 {
     // IF the buffer is empty dont do anything
-    if(buffer[0] == NULL)
+    if(buffer[0] == CHAR_NULL)
     {
         return CMD_SUCCESS;
     }
@@ -315,6 +315,18 @@ static cmd_args_s* InitializeArgsNode(void)
     }
     return node;
 }
+// Add a new node to the end of the linked list
+static void AppendArgsNode(cmd_args_s* head, cmd_args_s* node)
+{
+    cmd_args_s* copy = head;
+    while (copy->next != NULL)
+    {
+        copy = copy->next;
+    }
+    copy->next = node;
+}
+
+
 
 /*
 * Free argument list (non-recurvively)

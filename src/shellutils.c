@@ -35,7 +35,7 @@ char_t* ConcatPaths(const char_t* lhs, const char_t* rhs)
     size_t lhsLastIndex = strlen(lhs) -1;
     if(lhs[lhsLastIndex] != '\\' && rhs[0] != '\\')
     {
-        strcpy(newPath + lhsLen, '\\', 1);
+        strncpy(newPath + lhsLen, "\\", 1);
     }
     // Avoid duplicating '\\' in newPath
     if(lhs[lhsLastIndex] == rhs[0] == '\\')
