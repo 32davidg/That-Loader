@@ -1,9 +1,9 @@
-#include "../include/shell.h"
-#include "../include/commands.h"
-#include "../include/shellutils.h"
-#include "../include/bootutils.h"
-#include "../include/logs.h"
-#include "../include/ErrorCodes.h"
+#include "shell.h"
+#include "commands.h"
+#include "shellutils.h"
+#include "bootutils.h"
+#include "logs.h"
+#include "ErrorCodes.h"
 
 
 #define SHELL_MAX_INPUT (128)

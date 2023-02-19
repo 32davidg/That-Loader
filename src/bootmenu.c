@@ -1,12 +1,12 @@
-#include "../include/bootmenu.h"
-#include "../include/shellutils.h"
-#include "../include/configfile.h"
-#include "../include/logs.h"
-#include "../include/bootutils.h"
-#include "../include/display.h"
-#include "../include/shell.h"
-#include "../include/LoadImage.h"
-#include "../include/efilibs.h"
+#include "bootmenu.h"
+#include "shellutils.h"
+#include "configfile.h"
+#include "logs.h"
+#include "bootutils.h"
+#include "display.h"
+#include "shell.h"
+#include "LoadImage.h"
+#include "efilibs.h"
 
 #define F5_KEY_SCANCODE (0x0F) // Used to refresh the menu (reparse config)
 

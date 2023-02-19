@@ -1,8 +1,8 @@
-#include "../include/commands.h"
-#include "../include/shellutils.h"
-#include "../include/shelldefs.h"
-#include "../include/bootutils.h"
-#include "../include/ErrorCodes.h"
+#include "commands.h"
+#include "shellutils.h"
+#include "shelldefs.h"
+#include "bootutils.h"
+#include "ErrorCodes.h"
 
 // Include all commands that can be executed
 /*

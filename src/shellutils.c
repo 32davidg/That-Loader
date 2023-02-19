@@ -1,8 +1,8 @@
-#include "../include/shellutils.h"
-#include "../include/logs.h"
-#include "../include/bootutils.h"
-#include "../include/ErrorCodes.h"
-#include "../include/display.h"
+#include "shellutils.h"
+#include "logs.h"
+#include "bootutils.h"
+#include "ErrorCodes.h"
+#include "display.h"
 
 #define DIRECTORY_DELIM ('\\')
 #define DIRECTORY_DELIM_STR ("\\")

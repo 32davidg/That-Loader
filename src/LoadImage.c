@@ -1,10 +1,10 @@
-#include "../include/LoadImage.h"
-#include "../include/logs.h"
-#include "../include/bootutils.h"
+#include "LoadImage.h"
+#include "logs.h"
+#include "bootutils.h"
 
 
 /*
-*   
+*   handle args and load image using Bootservices method
 */
 void ChainloadImage(char_t* path, char_t* args)
 {

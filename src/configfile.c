@@ -1,9 +1,9 @@
-#include "../include/configfile.h"
-#include "../include/logs.h"
-#include "../include/bootutils.h"
-#include "../include/shellutils.h"
-#include "../include/bootmenu.h"
-#include "../include/ErrorCodes.h"
+#include "configfile.h"
+#include "logs.h"
+#include "bootutils.h"
+#include "shellutils.h"
+#include "bootmenu.h"
+#include "ErrorCodes.h"
 
 // config file path
 #define CFG_PATH ("\\EFI\\thatloader\\config.cfg")
