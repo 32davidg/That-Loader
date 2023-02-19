@@ -14,13 +14,24 @@
 #define BAD_CONFIGURATION_ERR_MSG ("An error has occurred while parsing the config file.")
 #define FAILED_BOOT_ERR_MSG ("An error has occurred during the booting process.")
 
+// temp forward functions
 
-
-
-// Temp forward declarations
+static void BootMenu(boot_entry_array_s* entryArr);
 static void InitBootMenuOutput(void);
+
 static void FailMenu(const char_t* errorMsg);
-void StartBootManager();
+
+static inline void BootHighlightedEntry(boot_entry_array_s* entryArr);
+static inline void PrintHighlightedEntryInfo(boot_entry_array_s* entryArr);
+static void PrintBootMenu(boot_entry_array_s* entryArr);
+static inline void PrintInstructions(void);
+static void BootEntry(boot_entry_s* selectedEntry);
+static void PrintEntryInfo(boot_entry_s* selectedEntry);
+
+static void PrintMenuEntries(boot_entry_array_s* entryArr);
+static void scrollEntries(void);
+static void PrintTimeout(void);
+
 
 
 
@@ -415,6 +426,8 @@ static void PrintEntryInfo(boot_entry_s* selectedEntry)
     ClearScreen();
 }
 
+
+// wrapper func to print the info with a better usage
 static inline void PrintHighlightedEntryInfo(boot_entry_array_s* entryArr)
 {
     PrintEntryInfo(&entryArr->entryArray[bmcfg.selectedEntryIndex]);
