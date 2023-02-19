@@ -421,5 +421,27 @@ static inline void PrintHighlightedEntryInfo(boot_entry_array_s* entryArr)
 }
 
 
+/*
+* Print additional information about the image to be loaded
+* and call chainloading func
+*/
+static void BootEntry(boot_entry_s* selectedEntry)
+{
+    // Print info before booting
+    ST->ConOut->ClearScreen(ST->ConOut);
+    printf("Booting '%s'...\n"
+    "Image Args: '%s'\n"
+    "Image path: '%s'\n", selectedEntry->name, selectedEntry->imageArgs, selectedEntry->imageToLoad);
+
+
+    ChainloadImage(selectedEntry->imageToLoad, selectedEntry->imageArgs);
+
+    printf("\nFailed to boot.\n"
+    "Press any key to return to menu...");
+
+    GetInputKey();
+}
+
+
 
 
