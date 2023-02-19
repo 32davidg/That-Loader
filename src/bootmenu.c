@@ -455,6 +455,13 @@ static void BootEntry(boot_entry_s* selectedEntry)
     GetInputKey();
 }
 
+static inline void BootHighlightedEntry(boot_entry_array_s* entryArr)
+{
+    BootEntry(&entryArr->entryArray[bmcfg.selectedEntryIndex]);
+    // if booting failes, we end up here
+    FailMenu(FAILED_BOOT_ERR_MSG);
+}
+
 
 
 
