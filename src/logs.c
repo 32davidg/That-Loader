@@ -62,7 +62,7 @@ void Log(log_level_t loglevel, efi_status_t status, const char_t* fmtMessage, ..
     // print the string and add formatting (if there is any)
     va_list args;
     va_start(args, fmtMessage);
-    vprintf(log, fmtMessage, args);
+    vfprintf(log, fmtMessage, args);
     va_end(args);
 
     // Append UEFI error message if the status argument is an error status
@@ -94,7 +94,7 @@ time_t GetSecondsSinceInit(void)
 // Print the log file
 void PrintLogFile(void)
 {
-    uint8_t res = PrintFileContents();
+    uint8_t res = PrintFileContent(LOG_PATH);
     if (res != 0)
     {
         printf("Failed to open log file\n");
