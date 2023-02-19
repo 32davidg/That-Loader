@@ -226,9 +226,9 @@ static void PrintMenuEntries(boot_entry_array_s* entryArr)
         char_t* entryName = entryArr->entryArray[index].name;
         if(index == bmcfg.selectedEntryIndex) // highlight entry
         {
-            ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_BLACK, EFI_LIGHTGRAY));
-            printf(" %d) %s", entryNum, entryName);
-            ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK));
+            ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_BLACK, EFI_LIGHTGRAY)); // higlight text
+            printf(" %d) %s", entryNum, entryName); // print stuff
+            ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK)); // go back to normal
         }
         else // print normally
         {
