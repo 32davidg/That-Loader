@@ -80,7 +80,7 @@ static int8_t ShellLoop(char_t** currPathPtr)
 {
     while (TRUE)
     {
-        char_t* buffer[SHELL_MAX_INPUT] = {0};
+        char_t buffer[SHELL_MAX_INPUT] = {0};
         printf("> ");
 
         GetInputString(buffer, SHELL_MAX_INPUT, FALSE);
@@ -122,7 +122,7 @@ static int8_t ProcessCommand(char_t buffer[], char_t** currPathPtr)
         }
     }
 
-    const uint8_t* allCmds = CommandCount();
+    const uint8_t allCmds = CommandCount();
     for (uint8_t i = 0; i < allCmds; i++)
     {
         // Find the right command and execute the command function
@@ -148,7 +148,7 @@ static int8_t ProcessCommand(char_t buffer[], char_t** currPathPtr)
 /*
 * Get the actual command keyword from a buffer (and return it)
 */
-static char_t* GetCommandFromBuffer(char_t* buffer[])
+static char_t* GetCommandFromBuffer(char_t buffer[])
 {
     size_t bufferLen = strlen(buffer);
     if(bufferLen == 0)
