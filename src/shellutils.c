@@ -38,7 +38,7 @@ char_t* ConcatPaths(const char_t* lhs, const char_t* rhs)
         strncpy(newPath + lhsLen, "\\", 1);
     }
     // Avoid duplicating '\\' in newPath
-    if(lhs[lhsLastIndex] == rhs[0] == '\\')
+    if(lhs[lhsLastIndex] == '\\' && rhs[0] == '\\')
     {
         rhs++; // advance pointer to next character
     }
@@ -142,7 +142,7 @@ uint8_t NormalizePath(char_t** path)
 // get rid of unnecessary backslashes, and other whitespace chars
 void CleanPath(char_t** path)
 {
-    path = TrimSpaces(*path);
+    *path = TrimSpaces(*path);
 
     //remove duplicate backslashes from the command
     RemoveRepeatedChars(*path, DIRECTORY_DELIM);
