@@ -254,5 +254,137 @@ static void PrintMenuEntries(boot_entry_array_s* entryArr)
 
 }
 
+/*
+*   Print simple user instructions
+*/
+static inline void PrintInstructions(void)
+{
+    printf("\nUse the up and down arrow keys to select an entry.\n",
+    "Press enter to boot the seleted entry, press 'i' to get more info about the entry\n",
+    "Press 'c' to open shell, and 'F5' to refresh the menu.\n");
+}
+
+
+/*
+* This function prints the boot menu config timeout, alerting user it will boot automatically 
+* the highlighted entry
+*/
+static void PrintTimeout(void)
+{
+    ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_WHITE, EFI_BLACK));
+    printf("The highlighted entry will boot automatically in %d seconds.",bmcfg.timeoutSeconds);
+    ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK));
+    PadRow();
+}
+
+
+/*
+*   This function to print the boot fully. (all entries and timeouts included)
+*/
+static void PrintBootMenu(boot_entry_array_s* entryArr)
+{
+    if (screenModeSet)
+    {
+        ST->ConOut->SetCursorPosition(ST->ConOut, 0, 0);
+    }
+    else
+    {
+        ST->ConOut->ClearScreen(ST->ConOut);
+    }
+    printf("That-Loader - 1.2\n");
+
+    PrintMenuEntries(entryArr);
+
+    PrintInstructions();
+
+    if(!bmcfg.timeoutCancelled)
+    {
+        PrintTimeout();
+    }
+    else{
+        PrintEmptyLine();
+    }
+
+}
+
+static void BootMenu(boot_entry_array_s* entryArr)
+{
+    while(TRUE)
+    {
+        PrintBootMenu(entryArr);
+        if(!bmcfg.timeoutCancelled)
+        {
+            if(bmcfg.bootImmediately)
+            {
+                BootHighlightedEntry(entryArr);
+                return;
+            }
+
+            int32_t timerStatus = WaitForInput(1000);
+            if(timerStatus == INPUT_TIMER_TIMEOUT)
+            {
+                bmcfg.timeoutSeconds--;
+                //Boot the selected entry if the timer ends
+                if(bmcfg.timeoutSeconds == 0)
+                {
+                    BootHighlightedEntry(entryArr);
+                    return;
+                }
+                continue;
+            }
+            else if(timerStatus == INPUT_TIMER_KEY)
+            {
+                // Cancel the timer if a key was pressed
+                bmcfg.timeoutSeconds = TRUE;
+            }
+        }
+        efi_input_key_t key = GetInputKey();
+
+        switch (key.ScanCode)
+        {
+        case UP_ARROW_SCANCODE:
+            if(bmcfg.selectedEntryIndex != 0)
+            {
+                // scroll up
+                bmcfg.selectedEntryIndex--;
+                scrollEntries();
+                
+            }
+            break;
+        case DOWN_ARROW_SCANCODE:
+            if(bmcfg.selectedEntryIndex + 1 < entryArr->numOfEntries)
+            {
+                // scroll down
+                bmcfg.selectedEntryIndex++;
+                scrollEntries();
+                
+            }
+            break;
+        case F5_KEY_SCANCODE:
+            // redo the loop - and reparse the config
+            return;
+
+        
+        default:
+            switch (key.UnicodeChar)
+            {
+            case CHAR_CARRIAGE_RETURN:
+            // hit enter
+                BootHighlightedEntry(entryArr);
+                break;
+            case SHELL_CHAR:
+                StartShell();
+                break;
+            case INFO_CHAR:
+                PrintHighlightedEntryInfo(entryArr);
+            default:
+            //nun
+                break;
+            }
+        }
+    }
+}
+
+
 
 
