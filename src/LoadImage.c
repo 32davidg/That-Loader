@@ -73,7 +73,11 @@ void ChainloadImage(char_t* path, char_t* args)
 cleanup:
 // if chainloading fails, we have to clean things up for the next booting
 // aaaaaaaand we gotta take care of mem leaks
-
+    if(args != NULL)
+    {
+        free(imgProtocol->LoadOptions);
+    }
+    free(imgData);
 
 
 
