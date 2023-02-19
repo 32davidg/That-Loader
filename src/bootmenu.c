@@ -307,6 +307,11 @@ static void PrintBootMenu(boot_entry_array_s* entryArr)
 
 }
 
+
+/*
+* This is the main boot menu function, the main loop runs, waiting for input of up to 10 seconds
+* utlizes the timeout, and handles all input types (scrolling, shell initalization, opening a config file)
+*/
 static void BootMenu(boot_entry_array_s* entryArr)
 {
     while(TRUE)
