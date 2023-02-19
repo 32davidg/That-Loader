@@ -6,6 +6,7 @@
 #include "../include/display.h"
 #include "../include/shell.h"
 #include "../include/LoadImage.h"
+#include "../include/efilibs.h"
 
 #define F5_KEY_SCANCODE (0x0F) // Used to refresh the menu (reparse config)
 

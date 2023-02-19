@@ -85,7 +85,7 @@ boot_entry_array_s ParseConfig(void)
         else 
         {
             entryStrLen = configEntryEnd - filePtr;
-            ptrIncrement = entryStrLen + strLen(CFG_ENTRY_DELIMITER);
+            ptrIncrement = entryStrLen + strlen(CFG_ENTRY_DELIMITER);
         }
 
 
@@ -104,7 +104,7 @@ boot_entry_array_s ParseConfig(void)
             free(configData);
             return bootEntryArr;
         }
-        strcpy(strippedEnty, filePtr, entryStrLen); // copy the entry to strippedEnty
+        strncpy(strippedEnty, filePtr, entryStrLen); // copy the entry to strippedEnty
 
         // Create a copy because we need to keep the original pointer to free it
         // and strtok modifies the pointer
@@ -502,7 +502,7 @@ static char_t* GetKernelVersionString(const char_t* fullKernelFileName)
     char_t versionDelimiter = *kernelFileName;
     if(versionDelimiter == CHAR_NULL)
     {
-        retunr NULL;
+        return NULL;
     }
     kernelFileName++;
 
