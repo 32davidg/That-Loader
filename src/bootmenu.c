@@ -6,6 +6,15 @@
 #include "../include/display.h"
 #include "../include/shell.h"
 
+#define F5_KEY_SCANCODE (0x0F) // Used to refresh the menu (reparse config)
+
+#define SHELL_CHAR  ('c')
+#define INFO_CHAR   ('i')
+
+#define BAD_CONFIGURATION_ERR_MSG ("An error has occurred while parsing the config file.")
+#define FAILED_BOOT_ERR_MSG ("An error has occurred during the booting process.")
+
+
 
 
 // Temp forward declarations
@@ -29,24 +38,29 @@ void StartBootManager()
         SetTextPosition(29, 0);
         ST->ConOut->OutputString(ST->ConOut, L"Welcome to That Loader!\r\n");
 
-        //boot_entry_array_s bootEntries = ParseConfig();
-        // load config into bootEnteries, that will be done later
+
+        // Config parsing is in the loop because i want the config to be updatable even when the program is running 
+        boot_entry_array_s bootEntries = ParseConfig();
+        
+
+
         ST->ConIn->Reset(ST->ConIn, 0); // clean input buffer
 
 
         //check if Boot entries were parsed correctly
-        //if (bootEntries.numOfEntries == 0)
-        //{
-        //    FailMenu(BAD_CONFIGURATION_ERR_MSG);
-        //}
-        //else
-        //{
-        //    BootMenu(&bootEntries);
-        //}
+        if (bootEntries.numOfEntries == 0)
+        {
+            FailMenu(BAD_CONFIGURATION_ERR_MSG);
+        }
+        else
+        {
+            BootMenu(&bootEntries);
+            
+        }
 
 
         //clear up boot entries
-        //FreeConfigEntries(&bootEntries);
+        FreeConfigEntries(&bootEntries);
         bmcfg.selectedEntryIndex = 0;
         bmcfg.entryOffset = 0;
 
@@ -165,7 +179,9 @@ static void InitBootMenuOutput(void)
 
 }
 
-
+/*
+* change the selected index (scrool the entries)
+*/
 static void scrollEntries(void)
 {
     // 0
@@ -181,3 +197,62 @@ static void scrollEntries(void)
         bmcfg.entryOffset = bmcfg.selectedEntryIndex - bmcfg.maxEntriesOnScreen + 1;
     }
 }
+
+
+/*
+*   This function prints the current menu entries, and highlights the selcted one
+*/
+static void PrintMenuEntries(boot_entry_array_s* entryArr)
+{
+    int32_t index = bmcfg.entryOffset;
+
+    // Print hidden entries
+    if (index > 0)
+    {
+        printf(" . . . %d more", index);
+    }
+    else{
+        PrintEmptyLine();
+    }
+    for(int32_t i =0; i < bmcfg.maxEntriesOnScreen; i++)
+    {
+        //prevent goind out of bounds
+        if(index >= entryArr->numOfEntries)
+        {
+            break;
+        }
+
+        int32_t entryNum = index + 1;
+        char_t* entryName = entryArr->entryArray[index].name;
+        if(index == bmcfg.selectedEntryIndex) // highlight entry
+        {
+            ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_BLACK, EFI_LIGHTGRAY));
+            printf(" %d) %s", entryNum, entryName);
+            ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK));
+        }
+        else // print normally
+        {
+            printf(" %d) %s", entryNum, entryName);
+        }
+        PadRow();
+
+        index++;
+
+    }
+
+    // Print how many hidden entries are at the bottom of the screen
+    if(index < entryArr->numOfEntries)
+    {
+        printf(" . . . . %d more", entryArr->numOfEntries);
+        PadRow();
+    }
+    else
+    {
+        PrintEmptyLine();
+    }
+
+
+}
+
+
+
