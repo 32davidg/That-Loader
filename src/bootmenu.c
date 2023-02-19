@@ -4,6 +4,7 @@
 #include "../include/logs.h"
 #include "../include/bootutils.h"
 #include "../include/display.h"
+#include "../include/shell.h"
 
 
 
@@ -90,13 +91,12 @@ static void FailMenu(const char_t* errorMsg)
                 }
                 if(GetKey('2') == 1)
                 {
-                    // todo open shell
+                    StartShell();
                     break;
                 }
                 if(GetKey('3') == 1)
                 {
-                    //show error log
-                    // todo
+                    ShowLogFile();
                     break;
 
                 }
@@ -124,6 +124,19 @@ static void FailMenu(const char_t* errorMsg)
     }
     ST->ConOut->ClearScreen(ST->ConOut);
 
+}
+
+/*
+* Print the recent log file
+*/
+void ShowLogFile(void)
+{
+    ST->ConOut->ClearScreen(ST->ConOut);
+
+    PrintLogFile();
+
+    printf("\nPress any key to return...");
+    GetInputKey();
 }
 
 
