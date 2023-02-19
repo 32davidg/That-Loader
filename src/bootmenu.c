@@ -1,8 +1,10 @@
 #include "../include/bootmenu.h"
-#include "../include/ErrorCodes.h"
-#include "../include/efilibs.h"
+#include "../include/shellutils.h"
+#include "../include/configfile.h"
+#include "../include/logs.h"
 #include "../include/bootutils.h"
 #include "../include/display.h"
+
 
 
 // Temp forward declarations
@@ -17,7 +19,6 @@ void StartBootManager()
 {
 
     InitBootMenuOutput();
-    // for later, when reading from config file
     while(TRUE)
     {
         
@@ -102,13 +103,20 @@ static void FailMenu(const char_t* errorMsg)
                 if(GetKey('4') == 1)
                 {
                     // warm reboot
-                    ST->RuntimeServices->ResetSystem(EfiResetWarm, EFI_SUCCESS, 0, 0);
+                    ClearScreen();
+                    Log(LL_INFO, 0, "Warm resetting machine...");
+                    efi_status_t status = ST->RuntimeServices->ResetSystem(EfiResetWarm, EFI_SUCCESS, 0, 0);
+                    Log(LL_ERROR, status, "Failed to reboot machine");
                     break;            
                 }
                 if(GetKey('5') == 1)
                 {
+                    ClearScreen();
+                    Log(LL_INFO, 0, "Shutting down machine...");
                     //shutdown
                     ST->RuntimeServices->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, 0);
+                    Log(LL_ERROR, status, "Failed to reboot machine");
+
                     break;
                 }
             }
