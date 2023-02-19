@@ -8,11 +8,10 @@
 */
 void ChainloadImage(char_t* path, char_t* args)
 {
-    // A device handle must be passed to the loaded image protocol because of the way we call LoadImage
     efi_handle_t devHandle = GetFileDeviceHandle(path);
     if(devHandle == NULL)
     {
-        Log(LL_ERROR, "Unable to find device handle in chainloading process '%s'.", path);
+        Log(LL_ERROR,0,  "Unable to find device handle in chainloading process '%s'.", path);
         return;
     }
 
@@ -41,7 +40,7 @@ void ChainloadImage(char_t* path, char_t* args)
     if(EFI_ERROR(status))
     {
         Log(LL_ERROR, 0, "Failed to load the image '%s' for chainloading.", path);
-        //goto cleanup;
+        goto cleanup;
     }
 
     efi_guid_t loadedImageGuid = EFI_LOADED_IMAGE_PROTOCOL_GUID;
@@ -50,7 +49,7 @@ void ChainloadImage(char_t* path, char_t* args)
     if(EFI_ERROR(status))
     {
         Log(LL_ERROR, 0, "Failed to get loaded image protocol when passing arguments.");
-        //goto cleanup;
+        goto cleanup;
     }
     else
     {
