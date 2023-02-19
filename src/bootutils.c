@@ -42,7 +42,7 @@ efi_handle_t GetFileDeviceHandle(char_t* path)
     if(status == EFI_BUFFER_TOO_SMALL)
     {
         Log(LL_ERROR, status, "Inital location of the simple file system protocol handle failed");
-        retunr NULL;
+        return NULL;
     }
 
     handles = malloc(bufSize);
@@ -122,7 +122,7 @@ efi_handle_t GetFileDeviceHandle(char_t* path)
     free(handles);
     if (fileHandle == NULL)
     {
-        Log(LL_ERROR, "Unable to find the file '%s' on the machine.", path);
+        Log(LL_ERROR,0, "Unable to find the file '%s' on the machine.", path);
         return NULL;
     }
     return devHandle;
