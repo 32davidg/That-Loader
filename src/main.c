@@ -1,4 +1,4 @@
-#include "..\include\bootmenu.h"
+#include "bootmenu.h"
 #include "..\include\logs.h"
 #include "..\include\display.h"
 
