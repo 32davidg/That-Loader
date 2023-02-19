@@ -391,7 +391,8 @@ static void BootMenu(boot_entry_array_s* entryArr)
 }
 
 /*
-* This function prints the selected entry's info, taken from the config file
+* This function prints the selected entry's additional info, taken from the config file
+* such as path, arguments and name
 * Used when pressing 'i' on a highlighted entry
 */
 static void PrintEntryInfo(boot_entry_s* selectedEntry)
@@ -409,7 +410,14 @@ static void PrintEntryInfo(boot_entry_s* selectedEntry)
         printf("\nKernel directory: %s\n", selectedEntry->kernelScanInfo->kernelDirectory);
         printf("Kernel version string: %s\n", selectedEntry->kernelScanInfo->kernelVersionString);
     }
+    printf("Press any key to return...");
+    GetInputKey();
+    ClearScreen();
+}
 
+static inline void PrintHighlightedEntryInfo(boot_entry_array_s* entryArr)
+{
+    PrintEntryInfo(&entryArr->entryArray[bmcfg.selectedEntryIndex]);
 }
 
 
