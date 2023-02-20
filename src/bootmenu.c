@@ -52,6 +52,8 @@ void StartBootManager()
         
 
         // Config parsing is in the loop because i want the config to be updatable even when the program is running 
+        SetTextPosition(0, 1);
+        ST->ConOut->OutputString(ST->ConOut, L"Parsing config...\n");
         boot_entry_array_s bootEntries = ParseConfig();
         
 
@@ -304,9 +306,7 @@ static void PrintBootMenu(boot_entry_array_s* entryArr)
 
     ST->ConOut->SetCursorPosition(ST->ConOut, 6, 0);
     printf("That-Loader - 1.2\n");
-    ST->ConOut->SetCursorPosition(ST->ConOut, 0, 0);
-
-    //print_border(30, 80);
+    //ST->ConOut->SetCursorPosition(ST->ConOut, 0, 0);
 
     PrintMenuEntries(entryArr);
 
