@@ -239,7 +239,7 @@ static void PrintMenuEntries(boot_entry_array_s* entryArr)
         if(index == bmcfg.selectedEntryIndex) // highlight entry
         {
             ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_BLACK, EFI_LIGHTGRAY)); // higlight text
-            printf(" %d) *%s", entryNum, entryName); // print stuff
+            printf("* %d) %s", entryNum, entryName); // print stuff
             ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK)); // go back to normal
         }
         else // print normally
@@ -285,7 +285,7 @@ static void PrintTimeout(void)
 {
     ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_DARKGRAY, EFI_BLACK));
     //ST->ConOut->SetCursorPosition(ST->ConOut,0 , DEFAULT_CONSOLE_ROWS);
-    printf("The highlighted entry will boot automatically in %d seconds.",bmcfg.timeoutSeconds);
+    printf("\nThe highlighted entry will boot automatically in %d seconds.",bmcfg.timeoutSeconds);
     ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK));
     PadRow();
 }
