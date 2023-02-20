@@ -238,7 +238,7 @@ static void PrintMenuEntries(boot_entry_array_s* entryArr)
         if(index == bmcfg.selectedEntryIndex) // highlight entry
         {
             ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_BLACK, EFI_LIGHTGRAY)); // higlight text
-            printf(" %d) %s", entryNum, entryName); // print stuff
+            printf(" *%d) %s", entryNum, entryName); // print stuff
             ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK)); // go back to normal
         }
         else // print normally
@@ -270,9 +270,9 @@ static void PrintMenuEntries(boot_entry_array_s* entryArr)
 */
 static inline void PrintInstructions(void)
 {
-    printf("\nUse the up and down arrow keys to select an entry.\n",
+    printf("\nUse the ↑ and ↓ arrow keys to select which entry is highlighted.\n",
     "Press enter to boot the seleted entry, press 'i' to get more info about the entry\n",
-    "Press 'c' to open shell, and 'F5' to refresh the menu.\n");
+    "Press 'c' for a command-line, and 'F5' to refresh the menu.\n");
 }
 
 
@@ -327,7 +327,7 @@ static void BootMenu(boot_entry_array_s* entryArr)
 {
     while(TRUE)
     {
-        efi_status_t status = ST->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, 0, (void**)&gop);
+        //efi_status_t status = ST->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, 0, (void**)&gop);
         DrawBorder();
         PrintBootMenu(entryArr);
         if(!bmcfg.timeoutCancelled)

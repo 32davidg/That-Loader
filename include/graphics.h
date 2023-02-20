@@ -4,7 +4,7 @@
 // GRAPHICS
 
 // This sets the color of the pixels ( Graphics Color )
-void SetGraphicsColor(UINT32 color)
+void SetGraphicsColor(uint32_t color)
 {
     EFI_GRAPHICS_OUTPUT_BLT_PIXEL GColor;
     GColor.Reserved = color >> 24;
