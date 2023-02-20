@@ -239,7 +239,7 @@ static void PrintMenuEntries(boot_entry_array_s* entryArr)
         if(index == bmcfg.selectedEntryIndex) // highlight entry
         {
             ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_BLACK, EFI_LIGHTGRAY)); // higlight text
-            printf(" *%d) %s", entryNum, entryName); // print stuff
+            printf(" %d) *%s", entryNum, entryName); // print stuff
             ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK)); // go back to normal
         }
         else // print normally
@@ -271,8 +271,8 @@ static void PrintMenuEntries(boot_entry_array_s* entryArr)
 */
 static inline void PrintInstructions(void)
 {
-    printf("\nUse the ↑ and ↓ arrow keys to select which entry is highlighted.\n",
-    "Press enter to boot the seleted entry, press 'i' to get more info about the entry\n",
+    printf("\nUse the ↑ and ↓ arrow keys to select which entry is highlighted.\n"
+    "Press enter to boot the seleted entry, press 'i' to get more info about the entry\n"
     "Press 'c' for a command-line, and 'F5' to refresh the menu.\n");
 }
 
@@ -284,7 +284,7 @@ static inline void PrintInstructions(void)
 static void PrintTimeout(void)
 {
     ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_DARKGRAY, EFI_BLACK));
-    ST->ConOut->SetCursorPosition(ST->ConOut, DEFAULT_CONSOLE_ROWS , 0);
+    //ST->ConOut->SetCursorPosition(ST->ConOut,0 , DEFAULT_CONSOLE_ROWS);
     printf("The highlighted entry will boot automatically in %d seconds.",bmcfg.timeoutSeconds);
     ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK));
     PadRow();
@@ -305,7 +305,7 @@ static void PrintBootMenu(boot_entry_array_s* entryArr)
         ST->ConOut->ClearScreen(ST->ConOut);
     }
 
-    ST->ConOut->SetCursorPosition(ST->ConOut, 18, 0);
+    ST->ConOut->SetCursorPosition(ST->ConOut, DEFAULT_CONSOLE_COLUMNS/2, 0);
     ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_WHITE, EFI_BLACK));
     printf("That-Loader - 1.2\n");
     //ST->ConOut->SetCursorPosition(ST->ConOut, 0, 0);
