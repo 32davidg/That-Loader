@@ -2,7 +2,7 @@
 #include "graphics.h"
 
 #define DEFAULT_CONSOLE_COLUMNS (80)
-#define DEFAULT_CONSOLE_ROWS    (30);
+#define DEFAULT_CONSOLE_ROWS    (30)
 
 // Sets the Column and Row of the text screen cursor position.
 void SetTextPosition(uint32_t Col, uint32_t Row)

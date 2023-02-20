@@ -58,7 +58,7 @@ void StartBootManager()
 
         ST->ConIn->Reset(ST->ConIn, 0); // clean input buffer
 
-
+        ClearScreen();
         //check if Boot entries were parsed correctly
         if (bootEntries.numOfEntries == 0)
         {
@@ -230,6 +230,8 @@ static void PrintMenuEntries(boot_entry_array_s* entryArr)
         if(index >= entryArr->numOfEntries)
         {
             break;
+            DEFAULT_CONSOLE_COLUMNS
+            DEFAULT_CONSOLE_ROWS
         }
 
         int32_t entryNum = index + 1;
@@ -301,7 +303,10 @@ static void PrintBootMenu(boot_entry_array_s* entryArr)
     {
         ST->ConOut->ClearScreen(ST->ConOut);
     }
+
+    ST->ConOut->SetCursorPosition(ST->ConOut, 6, 0);
     printf("That-Loader - 1.2\n");
+    ST->ConOut->SetCursorPosition(ST->ConOut, 0, 0);
 
     //print_border(30, 80);
 
@@ -462,6 +467,7 @@ static inline void BootHighlightedEntry(boot_entry_array_s* entryArr)
     // if booting failes, we end up here
     FailMenu(FAILED_BOOT_ERR_MSG);
 }
+
 
 
 
