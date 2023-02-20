@@ -283,8 +283,8 @@ static inline void PrintInstructions(void)
 */
 static void PrintTimeout(void)
 {
-    ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_WHITE, EFI_BLACK));
-    ST->ConOut->SetCursorPosition(ST->ConOut, DEFAULT_CONSOLE_ROWS - 1, 0);
+    ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_DARKGRAY, EFI_BLACK));
+    ST->ConOut->SetCursorPosition(ST->ConOut, DEFAULT_CONSOLE_ROWS , 0);
     printf("The highlighted entry will boot automatically in %d seconds.",bmcfg.timeoutSeconds);
     ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK));
     PadRow();
@@ -306,6 +306,7 @@ static void PrintBootMenu(boot_entry_array_s* entryArr)
     }
 
     ST->ConOut->SetCursorPosition(ST->ConOut, 18, 0);
+    ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_WHITE, EFI_BLACK));
     printf("That-Loader - 1.2\n");
     //ST->ConOut->SetCursorPosition(ST->ConOut, 0, 0);
 
