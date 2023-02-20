@@ -154,7 +154,7 @@ boot_entry_array_s ParseConfig(void)
         {
             FreeConfigEntry(&entry);
         }
-        filePtr += ptrIncrement;
+        filePtr += ptrIncrement; //move pointer to next block
     }
     free(configData);
     if(bootEntryArr.numOfEntries ==0)
