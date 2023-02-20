@@ -49,7 +49,7 @@ void StartBootManager()
         ST->ConOut->EnableCursor(ST->ConOut, FALSE);
         SetTextPosition(3, 0);
         ST->ConOut->OutputString(ST->ConOut, L"Welcome to That Loader!\r\n");
-        print_border(30, 80);
+        
 
         // Config parsing is in the loop because i want the config to be updatable even when the program is running 
         boot_entry_array_s bootEntries = ParseConfig();
@@ -303,6 +303,8 @@ static void PrintBootMenu(boot_entry_array_s* entryArr)
     }
     printf("That-Loader - 1.2\n");
 
+    //print_border(30, 80);
+
     PrintMenuEntries(entryArr);
 
     PrintInstructions();
@@ -326,8 +328,6 @@ static void BootMenu(boot_entry_array_s* entryArr)
 {
     while(TRUE)
     {
-        //efi_status_t status = ST->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, 0, (void**)&gop);
-        DrawBorder();
         PrintBootMenu(entryArr);
         if(!bmcfg.timeoutCancelled)
         {
