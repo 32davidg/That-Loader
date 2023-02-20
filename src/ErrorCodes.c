@@ -1,4 +1,4 @@
-#include "../include/ErrorCodes.h"
+#include "ErrorCodes.h"
 
 
 void PrintCommandError(const char_t* cmd, const char_t* args, const uint8_t error)

@@ -1,9 +1,10 @@
-#include "..\include\bootmenu.h"
-#include "..\include\logs.h"
-#include "..\include\display.h"
+#include "bootmenu.h"
+#include "logs.h"
+#include "display.h"
 
 int main(int argc, char **argv)
 {
+    ST->ConOut->ClearScreen(ST->ConOut);
     if(!InitLogger())
     {
         printf("Failed to initialize logs, guess logs are now disabled\n");

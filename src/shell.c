@@ -1,9 +1,9 @@
-#include "../include/shell.h"
-#include "../include/commands.h"
-#include "../include/shellutils.h"
-#include "../include/bootutils.h"
-#include "../include/logs.h"
-#include "../include/ErrorCodes.h"
+#include "shell.h"
+#include "commands.h"
+#include "shellutils.h"
+#include "bootutils.h"
+#include "logs.h"
+#include "ErrorCodes.h"
 
 
 #define SHELL_MAX_INPUT (128)
@@ -80,7 +80,7 @@ static int8_t ShellLoop(char_t** currPathPtr)
 {
     while (TRUE)
     {
-        char_t* buffer[SHELL_MAX_INPUT] = {0};
+        char_t buffer[SHELL_MAX_INPUT] = {0};
         printf("> ");
 
         GetInputString(buffer, SHELL_MAX_INPUT, FALSE);
@@ -122,7 +122,7 @@ static int8_t ProcessCommand(char_t buffer[], char_t** currPathPtr)
         }
     }
 
-    const uint8_t* allCmds = CommandCount();
+    const uint8_t allCmds = CommandCount();
     for (uint8_t i = 0; i < allCmds; i++)
     {
         // Find the right command and execute the command function
@@ -148,7 +148,7 @@ static int8_t ProcessCommand(char_t buffer[], char_t** currPathPtr)
 /*
 * Get the actual command keyword from a buffer (and return it)
 */
-static char_t* GetCommandFromBuffer(char_t* buffer[])
+static char_t* GetCommandFromBuffer(char_t buffer[])
 {
     size_t bufferLen = strlen(buffer);
     if(bufferLen == 0)
@@ -264,7 +264,7 @@ static int8_t ParseArgs(char_t* inputArgs, cmd_args_s** outputArgs)
 static int8_t SplitArgsString(char_t buffer[], cmd_args_s** outputArgs)
 {
     // IF the buffer is empty dont do anything
-    if(buffer[0] == NULL)
+    if(buffer[0] == CHAR_NULL)
     {
         return CMD_SUCCESS;
     }
@@ -315,6 +315,18 @@ static cmd_args_s* InitializeArgsNode(void)
     }
     return node;
 }
+// Add a new node to the end of the linked list
+static void AppendArgsNode(cmd_args_s* head, cmd_args_s* node)
+{
+    cmd_args_s* copy = head;
+    while (copy->next != NULL)
+    {
+        copy = copy->next;
+    }
+    copy->next = node;
+}
+
+
 
 /*
 * Free argument list (non-recurvively)

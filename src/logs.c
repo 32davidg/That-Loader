@@ -1,5 +1,5 @@
-#include "../include/logs.h"
-#include "../include/shellutils.h"
+#include "logs.h"
+#include "shellutils.h"
 
 #define THAT_LOADER_NAME_STR "ThatLoader"
 

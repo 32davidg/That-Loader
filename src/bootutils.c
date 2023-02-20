@@ -1,5 +1,5 @@
-#include "../include/bootutils.h"
-#include "../include/logs.h"
+#include "bootutils.h"
+#include "logs.h"
 
 
 
@@ -185,11 +185,7 @@ efi_status_t GetFileInfo(efi_file_handle_t* fileHandle, efi_file_info_t* fileInf
     efi_guid_t infGuid = EFI_FILE_INFO_GUID;
     uintn_t size = sizeof(efi_file_info_t);
     return fileHandle->GetInfo(fileHandle, &infGuid, &size, (void*)fileInfo);
-
-
-
 }
-
 
 // Returns the size of the file in bytes
 uint64_t GetFileSize(FILE* file)

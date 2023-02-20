@@ -1,12 +1,12 @@
-#include "../include/bootmenu.h"
-#include "../include/shellutils.h"
-#include "../include/configfile.h"
-#include "../include/logs.h"
-#include "../include/bootutils.h"
-#include "../include/display.h"
-#include "../include/shell.h"
-#include "../include/LoadImage.h"
-#include "../include/efilibs.h"
+#include "bootmenu.h"
+#include "shellutils.h"
+#include "configfile.h"
+#include "logs.h"
+#include "bootutils.h"
+#include "display.h"
+#include "shell.h"
+#include "LoadImage.h"
+#include "efilibs.h"
 
 #define F5_KEY_SCANCODE (0x0F) // Used to refresh the menu (reparse config)
 
@@ -48,7 +48,7 @@ void StartBootManager()
         ST->ConOut->ClearScreen(ST->ConOut);
         ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK));
         ST->ConOut->EnableCursor(ST->ConOut, FALSE);
-        SetTextPosition(29, 0);
+        SetTextPosition(3, 0);
         ST->ConOut->OutputString(ST->ConOut, L"Welcome to That Loader!\r\n");
 
 
@@ -102,53 +102,51 @@ static void FailMenu(const char_t* errorMsg)
            "3) Show error log file\r\n"
            "4) Warm reboot (Restart)\r\n"
            "5) Shutdown\r\n"
-           "Choose desired option to continue\r\n");
+           "Choose desired option to continue (1-5)\n");
         
-        while(1)
+        ST->ConIn->Reset(ST->ConIn, 0);
+        efi_input_key_t key = {0};
+
+        // check if key is valid
+        do
         {
-            ST->ConIn->Reset(ST->ConIn, 0);
-            efi_status_t status = CheckKey();
-            if(status == EFI_SUCCESS)
-            {
-                if(GetKey('1') == 1)
-                {
-                    // return to main menu
-                    returnToMainMenu =TRUE;
-                    break;
-                }
-                if(GetKey('2') == 1)
-                {
-                    StartShell();
-                    break;
-                }
-                if(GetKey('3') == 1)
-                {
-                    ShowLogFile();
-                    break;
+            key = GetInputKey();
+        } while ((key.UnicodeChar < '1') || (key.UnicodeChar > '5'));
 
-                }
-                if(GetKey('4') == 1)
-                {
-                    // warm reboot
-                    ClearScreen();
-                    Log(LL_INFO, 0, "Warm resetting machine...");
-                    efi_status_t status = ST->RuntimeServices->ResetSystem(EfiResetWarm, EFI_SUCCESS, 0, 0);
-                    Log(LL_ERROR, status, "Failed to reboot machine");
-                    break;            
-                }
-                if(GetKey('5') == 1)
-                {
-                    ClearScreen();
-                    Log(LL_INFO, 0, "Shutting down machine...");
-                    //shutdown
-                    ST->RuntimeServices->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, 0);
-                    Log(LL_ERROR, status, "Failed to reboot machine");
-
-                    break;
-                }
-            }
+        switch(key.UnicodeChar)
+        {
+            case '1':
+                
+                returnToMainMenu = TRUE;
+                break;
+            case '2':
+                StartShell();
+                
+                break;
+            case '3':
+                ShowLogFile();
+                
+                break;
+            case '4':
+                // warm reboot
+                ClearScreen();
+                Log(LL_INFO, 0, "Warm resetting machine...");
+                efi_status_t status = ST->RuntimeServices->ResetSystem(EfiResetWarm, EFI_SUCCESS, 0, 0);
+                Log(LL_ERROR, 0, "Failed to reboot machine");
+                break;
+            case '5':
+                ClearScreen();
+                Log(LL_INFO, 0, "Shutting down machine...");
+                // shutdown
+                ST->RuntimeServices->ResetSystem(EfiResetShutdown, EFI_SUCCESS, 0, 0);
+                Log(LL_ERROR, 0, "Failed to shutdown machine");
+                break;
+            default:
+                // nothing
+                break;
         }
     }
+    
     ST->ConOut->ClearScreen(ST->ConOut);
 
 }
