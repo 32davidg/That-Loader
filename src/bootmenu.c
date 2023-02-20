@@ -48,7 +48,7 @@ void StartBootManager()
         ST->ConOut->ClearScreen(ST->ConOut);
         ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK));
         ST->ConOut->EnableCursor(ST->ConOut, FALSE);
-        SetTextPosition(29, 0);
+        SetTextPosition(3, 0);
         ST->ConOut->OutputString(ST->ConOut, L"Welcome to That Loader!\r\n");
 
 
@@ -132,7 +132,7 @@ static void FailMenu(const char_t* errorMsg)
                 ClearScreen();
                 Log(LL_INFO, 0, "Warm resetting machine...");
                 efi_status_t status = ST->RuntimeServices->ResetSystem(EfiResetWarm, EFI_SUCCESS, 0, 0);
-                Log(LL_ERROR, status, "Failed to reboot machine");
+                Log(LL_ERROR, 0, "Failed to reboot machine");
                 break;
             case '5':
                 ClearScreen();

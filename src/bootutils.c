@@ -147,7 +147,7 @@ void EnableWatchdogTimer(uintn_t seconds)
 // The function reads the file content into a dynamically allocated buffer (null terminated)
 // The buffer must be freed by the user
 // outFileSize is an optional parameter, it will contain the file size
-char_t* GetFileContent(char_t* path, uint64_t* outFileSize)
+char_t* printGetFileContent(char_t* path, uint64_t* outFileSize)
 {
     char_t* buffer = NULL;
     FILE* file = fopen(path, "r");

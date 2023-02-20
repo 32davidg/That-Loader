@@ -21,10 +21,8 @@
 #define BOOT_ENTRY_INIT { NULL, NULL, NULL, FALSE, NULL }
 #define BOOT_ENTRY_ARR_INIT { NULL, 0 }
 
-
 // initial ramdisk
 #define INITRD_ARG_STR ("initrd=")
-
 
 /* Basic config parser functions */
 static boolean_t AssignValueToEntry(const char_t* key, char_t* value, boot_entry_s* entry);
@@ -111,7 +109,7 @@ boot_entry_array_s ParseConfig(void)
         char_t* entryCopy = strippedEnty;
         char_t* line = NULL;
         // Gets lines from entry blocks and parses them
-        while ((line = strtok_r(entryCopy, CFG_LINE_DELIMITER, &entryCopy)) == NULL)
+        while ((line = strtok_r(entryCopy, CFG_LINE_DELIMITER, &entryCopy)) != NULL)
         {
             // Ignore comments
             if (line[0] == CFG_COMMENT_CHAR)
