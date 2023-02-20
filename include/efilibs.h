@@ -1,4 +1,9 @@
 #include <uefi.h>
+#include "graphics.h"
+
+#define DEFAULT_CONSOLE_COLUMNS (80)
+#define DEFAULT_CONSOLE_ROWS    (30)
+
 // Sets the Column and Row of the text screen cursor position.
 void SetTextPosition(uint32_t Col, uint32_t Row)
 {
@@ -59,4 +64,3 @@ efi_status_t CheckKey()
 {
     return ST->ConIn->ReadKeyStroke(ST->ConIn, &CheckKeystroke);
 }
-

@@ -40,7 +40,6 @@ static void PrintTimeout(void);
 boot_menu_cfg_s bmcfg; // boot menu config
 void StartBootManager()
 {
-
     InitBootMenuOutput();
     while(TRUE)
     {
@@ -50,16 +49,18 @@ void StartBootManager()
         ST->ConOut->EnableCursor(ST->ConOut, FALSE);
         SetTextPosition(3, 0);
         ST->ConOut->OutputString(ST->ConOut, L"Welcome to That Loader!\r\n");
-
+        
 
         // Config parsing is in the loop because i want the config to be updatable even when the program is running 
+        SetTextPosition(0, 1);
+        ST->ConOut->OutputString(ST->ConOut, L"Parsing config...\n");
         boot_entry_array_s bootEntries = ParseConfig();
         
 
 
         ST->ConIn->Reset(ST->ConIn, 0); // clean input buffer
 
-
+        ClearScreen();
         //check if Boot entries were parsed correctly
         if (bootEntries.numOfEntries == 0)
         {
@@ -238,7 +239,7 @@ static void PrintMenuEntries(boot_entry_array_s* entryArr)
         if(index == bmcfg.selectedEntryIndex) // highlight entry
         {
             ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_BLACK, EFI_LIGHTGRAY)); // higlight text
-            printf(" %d) %s", entryNum, entryName); // print stuff
+            printf("* %d) %s", entryNum, entryName); // print stuff
             ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK)); // go back to normal
         }
         else // print normally
@@ -270,9 +271,9 @@ static void PrintMenuEntries(boot_entry_array_s* entryArr)
 */
 static inline void PrintInstructions(void)
 {
-    printf("\nUse the up and down arrow keys to select an entry.\n",
-    "Press enter to boot the seleted entry, press 'i' to get more info about the entry\n",
-    "Press 'c' to open shell, and 'F5' to refresh the menu.\n");
+    printf("\nUse the ↑ and ↓ arrow keys to select which entry is highlighted.\n"
+    "Press enter to boot the seleted entry, press 'i' to get more info about the entry\n"
+    "Press 'c' for a command-line, and 'F5' to refresh the menu.\n");
 }
 
 
@@ -282,8 +283,9 @@ static inline void PrintInstructions(void)
 */
 static void PrintTimeout(void)
 {
-    ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_WHITE, EFI_BLACK));
-    printf("The highlighted entry will boot automatically in %d seconds.",bmcfg.timeoutSeconds);
+    ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_DARKGRAY, EFI_BLACK));
+    //ST->ConOut->SetCursorPosition(ST->ConOut,0 , DEFAULT_CONSOLE_ROWS);
+    printf("\nThe highlighted entry will boot automatically in %d seconds.",bmcfg.timeoutSeconds);
     ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK));
     PadRow();
 }
@@ -302,7 +304,11 @@ static void PrintBootMenu(boot_entry_array_s* entryArr)
     {
         ST->ConOut->ClearScreen(ST->ConOut);
     }
+
+    ST->ConOut->SetCursorPosition(ST->ConOut, DEFAULT_CONSOLE_COLUMNS/2, 0);
+    ST->ConOut->SetAttribute(ST->ConOut, EFI_TEXT_ATTR(EFI_WHITE, EFI_BLACK));
     printf("That-Loader - 1.2\n");
+    //ST->ConOut->SetCursorPosition(ST->ConOut, 0, 0);
 
     PrintMenuEntries(entryArr);
 
@@ -336,7 +342,7 @@ static void BootMenu(boot_entry_array_s* entryArr)
                 return;
             }
 
-            int32_t timerStatus = WaitForInput(1000);
+            int32_t timerStatus = WaitForInput(10000);
             if(timerStatus == INPUT_TIMER_TIMEOUT)
             {
                 bmcfg.timeoutSeconds--;
@@ -461,6 +467,7 @@ static inline void BootHighlightedEntry(boot_entry_array_s* entryArr)
     // if booting failes, we end up here
     FailMenu(FAILED_BOOT_ERR_MSG);
 }
+
 
 
 

@@ -18,8 +18,15 @@ typedef struct boot_menu_cfg_s
     boolean_t bootImmediately;
 } boot_menu_cfg_s;
 
+
 extern boot_menu_cfg_s bmcfg;
 
 void StartBootManager(void);
 
 void ShowLogFile(void);
+
+
+
+
+
+
