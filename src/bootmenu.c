@@ -40,7 +40,7 @@ static void PrintTimeout(void);
 boot_menu_cfg_s bmcfg; // boot menu config
 void StartBootManager()
 {
-
+    print_border(30, 80);
     InitBootMenuOutput();
     while(TRUE)
     {
