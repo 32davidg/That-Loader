@@ -1,4 +1,11 @@
 #include <uefi.h>
+#include "graphics.h"
+
+#define DEFAULT_CONSOLE_COLUMNS (80)
+#define DEFAULT_CONSOLE_ROWS    (30)
+EFI_GRAPHICS_OUTPUT_PROTOCOL* gop;
+EFI_GRAPHICS_OUTPUT_BLT_PIXEL GraphicsColor;
+
 // Sets the Column and Row of the text screen cursor position.
 void SetTextPosition(uint32_t Col, uint32_t Row)
 {
@@ -60,3 +67,22 @@ efi_status_t CheckKey()
     return ST->ConIn->ReadKeyStroke(ST->ConIn, &CheckKeystroke);
 }
 
+
+void DrawBorder()
+{
+      // Use a loop to print the top and bottom borders
+  for (int col = 1; col < DEFAULT_CONSOLE_COLUMNS; col++) {
+    // Print the top border at position (xPos + col, yPos)
+    gop->Blt(gop, &GraphicsColor, EfiBltVideoFill, 0, 0, 0 + col, 0, 1, 1, 0);
+    // Print the bottom border at position (xPos + col, yPos + maxRows - 1)
+    gop->Blt(gop, &GraphicsColor, EfiBltVideoFill, 0, 0, 0 + col, 0 + DEFAULT_CONSOLE_ROWS - 1, 1, 1, 0);
+  }
+
+  // Use a loop to print the left and right borders
+  for (int row = 0; row < DEFAULT_CONSOLE_ROWS - 1; row++) {
+    // Print the left border at position (xPos, yPos + row)
+    gop->Blt(gop, &GraphicsColor, EfiBltVideoFill, 0, 0, 0, 0 + row, 1, 1, 0);
+    // Print the right border at position (xPos + maxCols - 1, yPos + row)
+    gop->Blt(gop, &GraphicsColor, EfiBltVideoFill, 0, 0, 0 + DEFAULT_CONSOLE_COLUMNS - 1, 0 + row, 1, 1, 0);
+  }
+}

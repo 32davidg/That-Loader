@@ -38,7 +38,6 @@ static void PrintTimeout(void);
 
 
 boot_menu_cfg_s bmcfg; // boot menu config
-GRAPHI* gop;
 void StartBootManager()
 {
 
@@ -328,6 +327,8 @@ static void BootMenu(boot_entry_array_s* entryArr)
 {
     while(TRUE)
     {
+        efi_status_t status = ST->BootServices->LocateProtocol(&EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID, 0, (void**)&gop);
+        DrawBorder();
         PrintBootMenu(entryArr);
         if(!bmcfg.timeoutCancelled)
         {
@@ -337,7 +338,7 @@ static void BootMenu(boot_entry_array_s* entryArr)
                 return;
             }
 
-            int32_t timerStatus = WaitForInput(1000);
+            int32_t timerStatus = WaitForInput(10000);
             if(timerStatus == INPUT_TIMER_TIMEOUT)
             {
                 bmcfg.timeoutSeconds--;
