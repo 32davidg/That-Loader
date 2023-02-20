@@ -230,8 +230,6 @@ static void PrintMenuEntries(boot_entry_array_s* entryArr)
         if(index >= entryArr->numOfEntries)
         {
             break;
-            DEFAULT_CONSOLE_COLUMNS
-            DEFAULT_CONSOLE_ROWS
         }
 
         int32_t entryNum = index + 1;
