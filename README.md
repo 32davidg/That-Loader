@@ -25,7 +25,7 @@ Run ``build-for-emu.bat`` - this will run the qemu emulator with the boot manage
 ### Building in a Linux enviorment
 apt package manager - ``make`` ``gcc``/``clang`` ``efibootmgr`` ``lld ``
 ### Emulating in a Linux enviorment
-``mtools`` ``qemu`` ``xorisso`` ``ovmf``
+``mtools`` ``qemu`` ``xorisso`` ``ovmf`` ``qemu-kvm``
 ### Building / Emulating in a Windows enviorment
 ``gcc`` ``OSFMount`` [click here to install](https://www.osforensics.com/tools/mount-disk-images.html)
 
